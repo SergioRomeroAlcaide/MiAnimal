@@ -5,93 +5,71 @@
 package dao;
 
 import Modelo.Veterinario;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class VeterinarioDAO {
-    private Connection connection;
+
+    private final Connection connection;
 
     public VeterinarioDAO(Connection connection) {
-        if (connection == null) {
-            throw new IllegalArgumentException("La conexión a la base de datos no puede ser nula.");
-        }
         this.connection = connection;
     }
 
-    // Crear veterinario
-    public void agregarVeterinario(Veterinario veterinario) throws SQLException {
-        String sql = "INSERT INTO veterinario (nombre, especialidad, telefono, email) VALUES (?, ?, ?, ?)";
+    // Crear un nuevo veterinario
+    public void createVeterinario(Veterinario veterinario) throws SQLException {
+        String sql = "INSERT INTO veterinarios (nombre, especialidad, telefono, email) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, veterinario.getNombre());
             stmt.setString(2, veterinario.getEspecialidad());
             stmt.setString(3, veterinario.getTelefono());
-            stmt.setString(4, veterinario.getEmail()); // Cambio realizado aquí
+            stmt.setString(4, veterinario.getEmail());
             stmt.executeUpdate();
         }
     }
 
     // Leer todos los veterinarios
-    public List<Veterinario> obtenerVeterinarios() throws SQLException {
+    public List<Veterinario> readVeterinarios() throws SQLException {
         List<Veterinario> veterinarios = new ArrayList<>();
-        String sql = "SELECT * FROM veterinario";
+        String sql = "SELECT * FROM veterinarios";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Veterinario veterinario = new Veterinario(
-                    rs.getInt("id"),
-                    rs.getString("nombre"),
-                    rs.getString("especialidad"),
-                    rs.getString("telefono"),
-                    rs.getString("email") // Cambio realizado aquí
-                );
-                veterinarios.add(veterinario);
+                veterinarios.add(new Veterinario(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("especialidad"),
+                        rs.getString("telefono"),
+                        rs.getString("email")
+                ));
             }
         }
         return veterinarios;
     }
 
-    // Leer veterinario por ID
-    public Veterinario obtenerVeterinarioPorId(int id) throws SQLException {
-        Veterinario veterinario = null;
-        String sql = "SELECT * FROM veterinario WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    veterinario = new Veterinario(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("especialidad"),
-                        rs.getString("telefono"),
-                        rs.getString("email") // Cambio realizado aquí
-                    );
-                }
-            }
-        }
-        return veterinario;
-    }
-
-    // Actualizar veterinario
-    public void actualizarVeterinario(Veterinario veterinario) throws SQLException {
-        String sql = "UPDATE veterinario SET nombre = ?, especialidad = ?, telefono = ?, email = ? WHERE id = ?";
+    // Actualizar un veterinario existente
+    public void updateVeterinario(Veterinario veterinario) throws SQLException {
+        String sql = "UPDATE veterinarios SET nombre = ?, especialidad = ?, telefono = ?, email = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, veterinario.getNombre());
             stmt.setString(2, veterinario.getEspecialidad());
             stmt.setString(3, veterinario.getTelefono());
-            stmt.setString(4, veterinario.getEmail()); // Cambio realizado aquí
+            stmt.setString(4, veterinario.getEmail());
             stmt.setInt(5, veterinario.getId());
             stmt.executeUpdate();
         }
     }
 
-    // Eliminar veterinario
-    public void eliminarVeterinario(int id) throws SQLException {
-        String sql = "DELETE FROM veterinario WHERE id = ?";
+    // Eliminar un veterinario por ID
+    public void deleteVeterinario(int id) throws SQLException {
+        String sql = "DELETE FROM veterinarios WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
     }
 }
+
 
