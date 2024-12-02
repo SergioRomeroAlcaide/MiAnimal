@@ -4,80 +4,109 @@
  */
 package Modelo;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class Mascota {
-    private int id;
-    private String nombre;
-    private String especie;
-    private String raza;
-    private int edad;
-    private int clienteId;
+    private SimpleIntegerProperty id;
+    private SimpleStringProperty nombre;
+    private SimpleStringProperty especie;
+    private SimpleStringProperty raza;
+    private SimpleIntegerProperty edad;
+    private SimpleIntegerProperty clienteId;
 
-    // Constructor para creación
+    // Constructor para creación (sin ID)
     public Mascota(String nombre, String especie, String raza, int edad, int clienteId) {
-        this.nombre = nombre;
-        this.especie = especie;
-        this.raza = raza;
-        this.edad = edad;
-        this.clienteId = clienteId;
+        this.id = new SimpleIntegerProperty();
+        this.nombre = new SimpleStringProperty(nombre);
+        this.especie = new SimpleStringProperty(especie);
+        this.raza = new SimpleStringProperty(raza);
+        this.edad = new SimpleIntegerProperty(edad);
+        this.clienteId = new SimpleIntegerProperty(clienteId);
     }
 
-    // Constructor para lectura desde la base de datos
+    // Constructor para lectura (con ID)
     public Mascota(int id, String nombre, String especie, String raza, int edad, int clienteId) {
-        this.id = id;
-        this.nombre = nombre;
-        this.especie = especie;
-        this.raza = raza;
-        this.edad = edad;
-        this.clienteId = clienteId;
+        this.id = new SimpleIntegerProperty(id);
+        this.nombre = new SimpleStringProperty(nombre);
+        this.especie = new SimpleStringProperty(especie);
+        this.raza = new SimpleStringProperty(raza);
+        this.edad = new SimpleIntegerProperty(edad);
+        this.clienteId = new SimpleIntegerProperty(clienteId);
     }
 
-    // Getters y setters
+    // Getters y Setters para JavaFX
     public int getId() {
+        return id.get();
+    }
+
+    public void setId(int id) {
+        this.id.set(id);
+    }
+
+    public SimpleIntegerProperty idProperty() {
         return id;
     }
 
     public String getNombre() {
+        return nombre.get();
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre.set(nombre);
+    }
+
+    public SimpleStringProperty nombreProperty() {
         return nombre;
     }
 
     public String getEspecie() {
+        return especie.get();
+    }
+
+    public void setEspecie(String especie) {
+        this.especie.set(especie);
+    }
+
+    public SimpleStringProperty especieProperty() {
         return especie;
     }
 
     public String getRaza() {
+        return raza.get();
+    }
+
+    public void setRaza(String raza) {
+        this.raza.set(raza);
+    }
+
+    public SimpleStringProperty razaProperty() {
         return raza;
     }
 
     public int getEdad() {
+        return edad.get();
+    }
+
+    public void setEdad(int edad) {
+        this.edad.set(edad);
+    }
+
+    public SimpleIntegerProperty edadProperty() {
         return edad;
     }
 
     public int getClienteId() {
-        return clienteId;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public void setEspecie(String especie) {
-        this.especie = especie;
-    }
-
-    public void setRaza(String raza) {
-        this.raza = raza;
-    }
-
-    public void setEdad(int edad) {
-        this.edad = edad;
+        return clienteId.get();
     }
 
     public void setClienteId(int clienteId) {
-        this.clienteId = clienteId;
+        this.clienteId.set(clienteId);
+    }
+
+    public SimpleIntegerProperty clienteIdProperty() {
+        return clienteId;
     }
 }
+
 

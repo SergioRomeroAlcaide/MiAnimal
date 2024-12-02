@@ -5,6 +5,7 @@
 package dao;
 
 import Modelo.Mascota;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,78 +14,29 @@ public class MascotaDAO {
     private Connection connection;
 
     public MascotaDAO(Connection connection) {
-        if (connection == null) {
-            throw new IllegalArgumentException("La conexión a la base de datos no puede ser nula.");
-        }
         this.connection = connection;
     }
 
-    // Método para agregar una nueva mascota
-    public void agregarMascota(Mascota mascota) throws SQLException {
-        String sql = "INSERT INTO mascota (nombre, especie, raza, edad, cliente_id) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    /**
+     * Crear una nueva mascota en la base de datos.
+     */
+    public void createMascota(Mascota mascota) throws SQLException {
+        String sql = "INSERT INTO mascotas (nombre, especie, raza, edad, clienteId) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, mascota.getNombre());
             stmt.setString(2, mascota.getEspecie());
             stmt.setString(3, mascota.getRaza());
             stmt.setInt(4, mascota.getEdad());
             stmt.setInt(5, mascota.getClienteId());
             stmt.executeUpdate();
-
-            // Obtener el ID generado y asignarlo a la mascota
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    mascota.setId(generatedKeys.getInt(1));
-                }
-            }
         }
     }
 
-    // Método para obtener todas las mascotas
-    public List<Mascota> obtenerMascotas() throws SQLException {
-        List<Mascota> mascotas = new ArrayList<>();
-        String sql = "SELECT * FROM mascota";
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Mascota mascota = new Mascota(
-                    rs.getInt("id"),
-                    rs.getString("nombre"),
-                    rs.getString("especie"),
-                    rs.getString("raza"),
-                    rs.getInt("edad"),
-                    rs.getInt("cliente_id")
-                );
-                mascotas.add(mascota);
-            }
-        }
-        return mascotas;
-    }
-
-    // Método para obtener una mascota por ID
-    public Mascota obtenerMascotaPorId(int id) throws SQLException {
-        Mascota mascota = null;
-        String sql = "SELECT * FROM mascota WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    mascota = new Mascota(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("especie"),
-                        rs.getString("raza"),
-                        rs.getInt("edad"),
-                        rs.getInt("cliente_id")
-                    );
-                }
-            }
-        }
-        return mascota;
-    }
-
-    // Método para actualizar una mascota
-    public void actualizarMascota(Mascota mascota) throws SQLException {
-        String sql = "UPDATE mascota SET nombre = ?, especie = ?, raza = ?, edad = ?, cliente_id = ? WHERE id = ?";
+    /**
+     * Actualizar una mascota existente en la base de datos.
+     */
+    public void updateMascota(Mascota mascota) throws SQLException {
+        String sql = "UPDATE mascotas SET nombre = ?, especie = ?, raza = ?, edad = ?, clienteId = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, mascota.getNombre());
             stmt.setString(2, mascota.getEspecie());
@@ -96,15 +48,65 @@ public class MascotaDAO {
         }
     }
 
-    // Método para eliminar una mascota por ID
-    public void eliminarMascota(int id) throws SQLException {
-        String sql = "DELETE FROM mascota WHERE id = ?";
+    /**
+     * Eliminar una mascota de la base de datos por su ID.
+     */
+    public void deleteMascota(int id) throws SQLException {
+        String sql = "DELETE FROM mascotas WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
     }
+
+    /**
+     * Obtener todas las mascotas de la base de datos.
+     */
+    public List<Mascota> getAllMascotas() throws SQLException {
+        List<Mascota> mascotas = new ArrayList<>();
+        String sql = "SELECT * FROM mascotas";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Mascota mascota = new Mascota(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("especie"),
+                        rs.getString("raza"),
+                        rs.getInt("edad"),
+                        rs.getInt("clienteId")
+                );
+                mascotas.add(mascota);
+            }
+        }
+        return mascotas;
+    }
+
+    /**
+     * Obtener una mascota por su ID.
+     */
+    public Mascota getMascotaById(int id) throws SQLException {
+        String sql = "SELECT * FROM mascotas WHERE id = ?";
+        Mascota mascota = null;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    mascota = new Mascota(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("especie"),
+                            rs.getString("raza"),
+                            rs.getInt("edad"),
+                            rs.getInt("clienteId")
+                    );
+                }
+            }
+        }
+        return mascota;
+    }
 }
+
 
 
 
