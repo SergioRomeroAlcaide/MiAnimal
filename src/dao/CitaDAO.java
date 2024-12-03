@@ -88,7 +88,7 @@ public class CitaDAO {
 
     // Actualizar una cita
     public void updateCita(Cita cita) throws SQLException {
-        String sql = "UPDATE citas SET fecha_hora = ?, motivo = ?, mascota_nombre = ?, cliente_nombre = ?, "
+        String sql = "UPDATE cita SET fecha_hora = ?, motivo = ?, mascota_nombre = ?, cliente_nombre = ?, "
                    + "mascota_id = ?, veterinario_id = ?, recordatorio_enviado = ? WHERE idPrimaria = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setTimestamp(1, Timestamp.valueOf(cita.getFechaHora()));
@@ -105,7 +105,7 @@ public class CitaDAO {
 
     // Eliminar una cita
     public void deleteCita(int citaId) throws SQLException {
-        String sql = "DELETE FROM citas WHERE idPrimaria = ?;";
+        String sql = "DELETE FROM citasWHERE idPrimaria = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, citaId);
             stmt.executeUpdate();
@@ -114,7 +114,7 @@ public class CitaDAO {
 
     // Marcar recordatorio como enviado
     public void marcarRecordatorioEnviado(int citaId) throws SQLException {
-        String sql = "UPDATE citas SET recordatorio_enviado = TRUE WHERE idPrimaria = ?;";
+        String sql = "UPDATE cita SET recordatorio_enviado = TRUE WHERE idPrimaria = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, citaId);
             stmt.executeUpdate();
