@@ -10,20 +10,28 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- *
- * @author silvn
- */
 public class MiAnimal extends Application {
+
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/Vista/login.fxml"));
-        primaryStage.setTitle("MiAnimal - Gestión Veterinaria");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
+    public void start(Stage primaryStage) {
+        try {
+            // Cargar la vista de login.fxml al iniciar la aplicación
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/login.fxml"));
+            Parent root = loader.load();
+            
+            // Configurar la escena
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("MiAnimal - Login");
+            primaryStage.setResizable(false); // Opcional: Bloquear el cambio de tamaño de la ventana
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 }
+

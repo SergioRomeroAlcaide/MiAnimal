@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="vistaControlador.recordatoriosFXMLController">
+    <!-- Encabezado -->
+    <top>
+        <Label text="Recordatorios de Citas" style="-fx-font-size: 24px; -fx-font-weight: bold;" BorderPane.alignment="CENTER" />
+    </top>
+
+    <!-- Cuerpo principal con tabla -->
+    <center>
+        <VBox spacing="10" alignment="CENTER">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+            <TableView fx:id="tablaRecordatorios">
+    <columns>
+        <TableColumn fx:id="columnaCliente" text="Cliente" />
+        <TableColumn fx:id="columnaMascota" text="Mascota" />
+        <TableColumn fx:id="columnaFechaHora" text="Fecha y Hora" />
+        <TableColumn fx:id="columnaMotivo" text="Motivo" />
+    </columns>
+</TableView>
+<Button text="Enviar Recordatorio" onAction="#enviarRecordatorio" />
+        </VBox>
+    </center>
+
+    <!-- Botones de acción -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+            <Button text="Enviar Recordatorio" onAction="#enviarRecordatorio" prefWidth="150" />
+            <Button text="Volver al Menú" onAction="#volverMenuPrincipal" prefWidth="150" />
+        </HBox>
+    </bottom>
+</BorderPane>
+
+

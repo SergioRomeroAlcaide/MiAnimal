@@ -5,36 +5,37 @@ import dao.CitaDAO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class CitaController {
-
     private final CitaDAO citaDAO;
 
     public CitaController(Connection connection) {
         this.citaDAO = new CitaDAO(connection);
     }
 
-    // Agregar una nueva cita
-    public void agregarCita(LocalDateTime fechaHora, String motivo, int mascotaId, int veterinarioId) throws SQLException {
-        Cita nuevaCita = new Cita(fechaHora, motivo, mascotaId, veterinarioId);
-        citaDAO.createCita(nuevaCita);
+    public void agregarCita(Cita cita) throws SQLException {
+        citaDAO.createCita(cita);
     }
 
-    // Obtener todas las citas
-    public List<Cita> obtenerCitas() throws SQLException {
-        return citaDAO.readCitas();
+    public List<Cita> obtenerTodasLasCitas() throws SQLException {
+        return citaDAO.readAllCitas();
     }
 
-    // Actualizar una cita existente
+    public List<Cita> obtenerProximasCitas() throws SQLException {
+        return citaDAO.readProximasCitas();
+    }
+
     public void actualizarCita(Cita cita) throws SQLException {
         citaDAO.updateCita(cita);
     }
 
-    // Eliminar una cita por ID
-    public void eliminarCita(int id) throws SQLException {
-        citaDAO.deleteCita(id);
+    public void eliminarCita(int citaId) throws SQLException {
+        citaDAO.deleteCita(citaId);
+    }
+
+    public void marcarRecordatorioEnviado(int citaId) throws SQLException {
+        citaDAO.marcarRecordatorioEnviado(citaId);
     }
 }
 
