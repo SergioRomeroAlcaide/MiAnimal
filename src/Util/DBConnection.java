@@ -1,32 +1,28 @@
 package Util;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/MiAnimal";
-    private static final String USER = "admin"; // Usuario administrador
-    private static final String PASSWORD = "admin"; // Contraseña del usuario administrador
 
-    // Método para obtener la conexión
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+    private static final String URL = "jdbc:mysql://localhost:3306/MiAnimal";
+
+    // Método para obtener la conexión según las credenciales del usuario
+    public static Connection getConnection(String usuario, String contrasena) throws SQLException {
+        return DriverManager.getConnection(URL, usuario, contrasena);
     }
 
     // Método para probar la conexión
-    public static void testConnection() {
-        try (Connection connection = getConnection()) {
+    public static void testConnection(String usuario, String contrasena) {
+        try (Connection connection = getConnection(usuario, contrasena)) {
             if (connection != null) {
-                System.out.println("Conexión exitosa con la base de datos.");
+                System.out.println("Conexión exitosa para el usuario: " + usuario);
             } else {
-                System.out.println("La conexión con la base de datos falló.");
+                System.out.println("Conexión fallida.");
             }
         } catch (SQLException e) {
-            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+            System.out.println("Error al conectar: " + e.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        testConnection(); // Llama al método para probar la conexión
     }
 }

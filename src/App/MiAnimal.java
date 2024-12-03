@@ -12,18 +12,25 @@ import javafx.stage.Stage;
 
 public class MiAnimal extends Application {
 
+    private static Stage primaryStage;
+
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage stage) {
         try {
-            // Cargar la vista de login.fxml al iniciar la aplicación
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/login.fxml"));
+            primaryStage = stage;
+            cambiarVista("/Vista/login.fxml", "MiAnimal - Inicio de Sesión");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void cambiarVista(String fxmlPath, String titulo) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MiAnimal.class.getResource(fxmlPath));
             Parent root = loader.load();
-            
-            // Configurar la escena
             Scene scene = new Scene(root);
+            primaryStage.setTitle(titulo);
             primaryStage.setScene(scene);
-            primaryStage.setTitle("MiAnimal - Login");
-            primaryStage.setResizable(false); // Opcional: Bloquear el cambio de tamaño de la ventana
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,4 +41,3 @@ public class MiAnimal extends Application {
         launch(args);
     }
 }
-
