@@ -3,25 +3,22 @@ package Controlador;
 import Modelo.Veterinario;
 import dao.VeterinarioDAO;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class VeterinarioController {
-
     private final VeterinarioDAO veterinarioDAO;
 
-    public VeterinarioController(Connection connection) {
-        this.veterinarioDAO = new VeterinarioDAO(connection);
+    public VeterinarioController() {
+        this.veterinarioDAO = new VeterinarioDAO();
     }
 
-    public void agregarVeterinario(String nombre, String especialidad, String telefono, String email) throws SQLException {
-        Veterinario nuevoVeterinario = new Veterinario(nombre, especialidad, telefono, email);
-        veterinarioDAO.createVeterinario(nuevoVeterinario);
+    public void agregarVeterinario(Veterinario veterinario) throws SQLException {
+        veterinarioDAO.createVeterinario(veterinario);
     }
 
     public List<Veterinario> obtenerVeterinarios() throws SQLException {
-        return veterinarioDAO.readVeterinarios();
+        return veterinarioDAO.getAllVeterinarios();
     }
 
     public void actualizarVeterinario(Veterinario veterinario) throws SQLException {
@@ -32,3 +29,4 @@ public class VeterinarioController {
         veterinarioDAO.deleteVeterinario(id);
     }
 }
+

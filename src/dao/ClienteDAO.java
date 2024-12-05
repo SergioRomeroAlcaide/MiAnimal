@@ -5,20 +5,47 @@
 package dao;
 
 import Modelo.Cliente;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteDAO {
-    private Connection connection;
 
-    public ClienteDAO(Connection connection) {
-        this.connection = connection;
+    private Connection conexion;
+
+    // Configurar la conexión
+    public void setConnection(Connection conexion) {
+        this.conexion = conexion;
     }
 
+    // Obtener todos los clientes
+    public List<Cliente> getAllClientes() throws SQLException {
+        List<Cliente> clientes = new ArrayList<>();
+        String query = "SELECT * FROM Cliente";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Cliente cliente = new Cliente(
+                        rs.getInt("id"), // Ajusta este campo según el modelo
+                        rs.getString("nombre"),
+                        rs.getString("telefono"),
+                        rs.getString("direccion"),
+                        rs.getString("email")
+                );
+                clientes.add(cliente);
+            }
+        }
+        return clientes;
+    }
+
+    // Crear un nuevo cliente
     public void createCliente(Cliente cliente) throws SQLException {
-        String sql = "INSERT INTO clientes (nombre, telefono, direccion, email) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        String query = "INSERT INTO Cliente (nombre, telefono, direccion, email) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, cliente.getNombre());
             stmt.setString(2, cliente.getTelefono());
             stmt.setString(3, cliente.getDireccion());
@@ -27,9 +54,11 @@ public class ClienteDAO {
         }
     }
 
+    // Actualizar un cliente
     public void updateCliente(Cliente cliente) throws SQLException {
-        String sql = "UPDATE clientes SET nombre = ?, telefono = ?, direccion = ?, email = ? WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        String query = "UPDATE Cliente SET nombre = ?, telefono = ?, direccion = ?, email = ? WHERE id = ?";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, cliente.getNombre());
             stmt.setString(2, cliente.getTelefono());
             stmt.setString(3, cliente.getDireccion());
@@ -39,29 +68,35 @@ public class ClienteDAO {
         }
     }
 
+    // Eliminar un cliente
     public void deleteCliente(int id) throws SQLException {
-        String sql = "DELETE FROM clientes WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        String query = "DELETE FROM Cliente WHERE id = ?";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
     }
 
-    public List<Cliente> getAllClientes() throws SQLException {
-        List<Cliente> clientes = new ArrayList<>();
-        String sql = "SELECT * FROM clientes";
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                clientes.add(new Cliente(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("telefono"),
-                        rs.getString("direccion"),
-                        rs.getString("email")
-                ));
+    // Obtener un cliente por ID
+    public Cliente getClienteById(int id) throws SQLException {
+        String query = "SELECT * FROM Cliente WHERE id = ?";
+        Cliente cliente = null;
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    cliente = new Cliente(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("telefono"),
+                            rs.getString("direccion"),
+                            rs.getString("email")
+                    );
+                }
             }
         }
-        return clientes;
+        return cliente;
     }
 }

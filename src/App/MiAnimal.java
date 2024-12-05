@@ -25,17 +25,27 @@ public class MiAnimal extends Application {
     }
 
     public static void cambiarVista(String fxmlPath, String titulo) {
-        try {
-            FXMLLoader loader = new FXMLLoader(MiAnimal.class.getResource(fxmlPath));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            primaryStage.setTitle(titulo);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+    try {
+        // Cargar archivo FXML desde la ruta
+        FXMLLoader loader = new FXMLLoader(MiAnimal.class.getResource(fxmlPath));
+        if (loader.getLocation() == null) {
+            throw new IllegalStateException("No se encontró el archivo FXML en la ruta: " + fxmlPath);
         }
+
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+
+        primaryStage.setTitle(titulo);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    } catch (IllegalStateException e) {
+        System.err.println("Error al cargar la vista: " + e.getMessage());
+    } catch (Exception e) {
+        System.err.println("Ocurrió un error inesperado al cargar la vista: " + fxmlPath);
+        e.printStackTrace();
     }
+}
+
 
     public static void main(String[] args) {
         launch(args);

@@ -2,55 +2,73 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
  */
-package DAO;
+package dao;
 
 import Modelo.Recordatorio;
+import Util.DBConnection;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecordatorioDAO {
-    private final Connection connection;
 
-    public RecordatorioDAO(Connection connection) {
-        this.connection = connection;
+    // Crear un recordatorio
+    public void createRecordatorio(Recordatorio recordatorio) throws SQLException {
+        String sql = "INSERT INTO recordatorio (cliente_nombre, mascota_nombre, motivo, fecha_hora, enviado) VALUES (?, ?, ?, ?, ?)";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, recordatorio.getClienteNombre());
+            stmt.setString(2, recordatorio.getMascotaNombre());
+            stmt.setString(3, recordatorio.getMotivo());
+            stmt.setTimestamp(4, Timestamp.valueOf(recordatorio.getFechaHora()));
+            stmt.setBoolean(5, recordatorio.isEnviado());
+            stmt.executeUpdate();
+        }
     }
 
     // Leer todos los recordatorios
-    public List<Recordatorio> obtenerRecordatorios() throws SQLException {
+    public List<Recordatorio> getAllRecordatorios() throws SQLException {
         List<Recordatorio> recordatorios = new ArrayList<>();
-        String sql = "SELECT c.id, cl.nombre AS cliente_nombre, m.nombre AS mascota_nombre, " +
-                     "c.motivo, c.fecha_hora, c.recordatorio_enviado " +
-                     "FROM citas c " +
-                     "JOIN mascotas m ON c.mascota_id = m.id " +
-                     "JOIN clientes cl ON m.cliente_id = cl.id " +
-                     "WHERE c.fecha_hora > NOW() " +
-                     "ORDER BY c.fecha_hora ASC;";
-
-        try (Statement stmt = connection.createStatement();
+        String sql = "SELECT id_recordatorio, cliente_nombre, mascota_nombre, motivo, fecha_hora, enviado FROM recordatorio";
+        try (Connection connection = DBConnection.getConnection();
+             Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Recordatorio recordatorio = new Recordatorio(
-                        rs.getInt("id"),
+                recordatorios.add(new Recordatorio(
+                        rs.getInt("id_recordatorio"),
                         rs.getString("cliente_nombre"),
                         rs.getString("mascota_nombre"),
                         rs.getString("motivo"),
                         rs.getTimestamp("fecha_hora").toLocalDateTime(),
-                        rs.getBoolean("recordatorio_enviado")
-                );
-                recordatorios.add(recordatorio);
+                        rs.getBoolean("enviado")
+                ));
             }
         }
         return recordatorios;
     }
 
-    // Marcar recordatorio como enviado
-    public void marcarRecordatorioEnviado(int recordatorioId) throws SQLException {
-        String sql = "UPDATE citas SET recordatorio_enviado = TRUE WHERE id = ?;";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, recordatorioId);
+    // Actualizar un recordatorio
+    public void updateRecordatorio(Recordatorio recordatorio) throws SQLException {
+        String sql = "UPDATE recordatorio SET cliente_nombre = ?, mascota_nombre = ?, motivo = ?, fecha_hora = ?, enviado = ? WHERE id_recordatorio = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, recordatorio.getClienteNombre());
+            stmt.setString(2, recordatorio.getMascotaNombre());
+            stmt.setString(3, recordatorio.getMotivo());
+            stmt.setTimestamp(4, Timestamp.valueOf(recordatorio.getFechaHora()));
+            stmt.setBoolean(5, recordatorio.isEnviado());
+            stmt.setInt(6, recordatorio.getId());
+            stmt.executeUpdate();
+        }
+    }
+
+    // Eliminar un recordatorio
+    public void deleteRecordatorio(int idRecordatorio) throws SQLException {
+        String sql = "DELETE FROM recordatorio WHERE id_recordatorio = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idRecordatorio);
             stmt.executeUpdate();
         }
     }

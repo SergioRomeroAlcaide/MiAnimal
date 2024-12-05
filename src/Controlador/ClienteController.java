@@ -3,20 +3,22 @@ package Controlador;
 import Modelo.Cliente;
 import dao.ClienteDAO;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class ClienteController {
-    private ClienteDAO clienteDAO;
+    private final ClienteDAO clienteDAO;
 
-    public ClienteController(Connection connection) {
-        this.clienteDAO = new ClienteDAO(connection);
+    public ClienteController() {
+        this.clienteDAO = new ClienteDAO();
     }
 
-    public void agregarCliente(String nombre, String telefono, String direccion, String email) throws SQLException {
-        Cliente cliente = new Cliente(nombre, telefono, direccion, email);
+    public void agregarCliente(Cliente cliente) throws SQLException {
         clienteDAO.createCliente(cliente);
+    }
+
+    public List<Cliente> obtenerClientes() throws SQLException {
+        return clienteDAO.getAllClientes();
     }
 
     public void actualizarCliente(Cliente cliente) throws SQLException {
@@ -26,8 +28,5 @@ public class ClienteController {
     public void eliminarCliente(int id) throws SQLException {
         clienteDAO.deleteCliente(id);
     }
-
-    public List<Cliente> obtenerClientes() throws SQLException {
-        return clienteDAO.getAllClientes();
-    }
 }
+

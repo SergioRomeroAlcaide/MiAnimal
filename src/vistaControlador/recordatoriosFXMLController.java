@@ -4,99 +4,123 @@
  */
 package vistaControlador;
 
-import Controlador.RecordatorioController;
 import Modelo.Recordatorio;
-import Util.DBConnection;
+import Controlador.RecordatorioController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class recordatoriosFXMLController {
+
     @FXML
     private TableView<Recordatorio> tablaRecordatorios;
-    @FXML
-    private TableColumn<Recordatorio, String> columnaCliente;
-    @FXML
-    private TableColumn<Recordatorio, String> columnaMascota;
-    @FXML
-    private TableColumn<Recordatorio, String> columnaMotivo;
-    @FXML
-    private TableColumn<Recordatorio, String> columnaFechaHora; // Cambiado a String
-    @FXML
-    private TableColumn<Recordatorio, Boolean> columnaEnviado;
 
-    private ObservableList<Recordatorio> listaRecordatorios;
-    private RecordatorioController recordatorioController;
+    @FXML
+    private TableColumn<Recordatorio, Integer> colId;
+
+    @FXML
+    private TableColumn<Recordatorio, String> colClienteNombre;
+
+    @FXML
+    private TableColumn<Recordatorio, String> colMascotaNombre;
+
+    @FXML
+    private TableColumn<Recordatorio, String> colMotivo;
+
+    @FXML
+    private TableColumn<Recordatorio, LocalDateTime> colFechaHora;
+
+    @FXML
+    private TableColumn<Recordatorio, Boolean> colEnviado;
+
+    @FXML
+    private TextField txtClienteNombre;
+
+    @FXML
+    private TextField txtMascotaNombre;
+
+    @FXML
+    private TextField txtMotivo;
+
+    @FXML
+    private TextField txtFechaHora; // Formato: "yyyy-MM-dd HH:mm"
+
+    @FXML
+    private CheckBox chkEnviado;
+
+    @FXML
+    private Button btnAgregar;
+
+    private final RecordatorioController recordatorioController = new RecordatorioController();
+    private final ObservableList<Recordatorio> recordatoriosList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        try {
-            Connection connection = DBConnection.getConnection();
-            recordatorioController = new RecordatorioController(connection);
-            listaRecordatorios = FXCollections.observableArrayList();
-
-            // Configurar las columnas
-            columnaCliente.setCellValueFactory(cellData -> cellData.getValue().clienteNombreProperty());
-            columnaMascota.setCellValueFactory(cellData -> cellData.getValue().mascotaNombreProperty());
-            columnaMotivo.setCellValueFactory(cellData -> cellData.getValue().motivoProperty());
-
-            // Formatear columna de fecha y hora
-            columnaFechaHora.setCellValueFactory(cellData -> {
-                LocalDateTime fechaHora = cellData.getValue().getFechaHora();
-                String fechaHoraFormateada = fechaHora != null
-                        ? fechaHora.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                        : "Sin Fecha";
-                return new SimpleStringProperty(fechaHoraFormateada); // Devuelve un SimpleStringProperty
-            });
-
-            columnaEnviado.setCellValueFactory(cellData -> cellData.getValue().enviadoProperty().asObject());
-
-            cargarRecordatorios();
-        } catch (SQLException e) {
-            mostrarAlerta("Error", "No se pudieron cargar los datos: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
+        configurarTabla();
+        cargarRecordatorios();
     }
 
-    @FXML
+    private void configurarTabla() {
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colClienteNombre.setCellValueFactory(new PropertyValueFactory<>("clienteNombre"));
+        colMascotaNombre.setCellValueFactory(new PropertyValueFactory<>("mascotaNombre"));
+        colMotivo.setCellValueFactory(new PropertyValueFactory<>("motivo"));
+        colFechaHora.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
+        colEnviado.setCellValueFactory(new PropertyValueFactory<>("enviado"));
+    }
+
     private void cargarRecordatorios() {
         try {
-            listaRecordatorios.setAll(recordatorioController.obtenerRecordatorios());
-            tablaRecordatorios.setItems(listaRecordatorios);
-        } catch (SQLException e) {
+            List<Recordatorio> recordatorios = recordatorioController.obtenerRecordatorios();
+            recordatoriosList.setAll(recordatorios);
+            tablaRecordatorios.setItems(recordatoriosList);
+        } catch (Exception e) {
             mostrarAlerta("Error", "Error al cargar los recordatorios: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
     @FXML
-    private void enviarRecordatorio(ActionEvent event) {
-        Recordatorio recordatorioSeleccionado = tablaRecordatorios.getSelectionModel().getSelectedItem();
-        if (recordatorioSeleccionado != null) {
-            try {
-                recordatorioController.marcarRecordatorioEnviado(recordatorioSeleccionado.getId());
-                mostrarAlerta("Éxito", "Recordatorio enviado correctamente.", Alert.AlertType.INFORMATION);
-                cargarRecordatorios();
-            } catch (SQLException e) {
-                mostrarAlerta("Error", "No se pudo enviar el recordatorio: " + e.getMessage(), Alert.AlertType.ERROR);
-            }
-        } else {
-            mostrarAlerta("Advertencia", "Seleccione un recordatorio para enviar.", Alert.AlertType.WARNING);
+    private void agregarRecordatorio() {
+        try {
+            String clienteNombre = txtClienteNombre.getText();
+            String mascotaNombre = txtMascotaNombre.getText();
+            String motivo = txtMotivo.getText();
+            String fechaHoraStr = txtFechaHora.getText();
+            boolean enviado = chkEnviado.isSelected();
+
+            // Convertir la fecha/hora de texto a LocalDateTime
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime fechaHora = LocalDateTime.parse(fechaHoraStr, formatter);
+
+            // Crear el nuevo recordatorio
+            Recordatorio nuevoRecordatorio = new Recordatorio(0, clienteNombre, mascotaNombre, motivo, fechaHora, enviado);
+            recordatorioController.agregarRecordatorio(nuevoRecordatorio);
+            cargarRecordatorios();
+            limpiarCampos();
+            mostrarAlerta("Éxito", "Recordatorio agregado correctamente", Alert.AlertType.INFORMATION);
+        } catch (Exception e) {
+            mostrarAlerta("Error", "Error al agregar el recordatorio: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+    private void limpiarCampos() {
+        txtClienteNombre.clear();
+        txtMascotaNombre.clear();
+        txtMotivo.clear();
+        txtFechaHora.clear();
+        chkEnviado.setSelected(false);
+    }
+
+    private void mostrarAlerta(String titulo, String contenido, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
-        alerta.setContentText(mensaje);
+        alerta.setContentText(contenido);
         alerta.showAndWait();
     }
 }
