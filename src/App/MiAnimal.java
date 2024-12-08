@@ -4,6 +4,7 @@
  */
 package App;
 
+import Util.DatabaseSetup;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +18,9 @@ public class MiAnimal extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            // Verificar la base de datos antes de iniciar la aplicación
+            DatabaseSetup.verificarBaseDeDatos();
+
             primaryStage = stage;
             cambiarVista("/Vista/login.fxml", "MiAnimal - Inicio de Sesión");
         } catch (Exception e) {
@@ -25,27 +29,18 @@ public class MiAnimal extends Application {
     }
 
     public static void cambiarVista(String fxmlPath, String titulo) {
-    try {
-        // Cargar archivo FXML desde la ruta
-        FXMLLoader loader = new FXMLLoader(MiAnimal.class.getResource(fxmlPath));
-        if (loader.getLocation() == null) {
-            throw new IllegalStateException("No se encontró el archivo FXML en la ruta: " + fxmlPath);
+        try {
+            FXMLLoader loader = new FXMLLoader(MiAnimal.class.getResource(fxmlPath));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            primaryStage.setTitle(titulo);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (Exception e) {
+            System.err.println("Error al cargar la vista: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-
-        primaryStage.setTitle(titulo);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    } catch (IllegalStateException e) {
-        System.err.println("Error al cargar la vista: " + e.getMessage());
-    } catch (Exception e) {
-        System.err.println("Ocurrió un error inesperado al cargar la vista: " + fxmlPath);
-        e.printStackTrace();
     }
-}
-
 
     public static void main(String[] args) {
         launch(args);

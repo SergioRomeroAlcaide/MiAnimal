@@ -4,96 +4,35 @@
  */
 package Modelo;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 public class Veterinario {
+    private int id;
+    private String nombre;
+    private String especialidad;
+    private String telefono;
+    private String email;
 
-    private final SimpleIntegerProperty id;
-    private final SimpleStringProperty nombre;
-    private final SimpleStringProperty especialidad;
-    private final SimpleStringProperty telefono;
-    private final SimpleStringProperty email;
-
-    // Constructor para lectura desde la base de datos
+    // Constructor
     public Veterinario(int id, String nombre, String especialidad, String telefono, String email) {
-        this.id = new SimpleIntegerProperty(id);
-        this.nombre = new SimpleStringProperty(nombre);
-        this.especialidad = new SimpleStringProperty(especialidad);
-        this.telefono = new SimpleStringProperty(telefono);
-        this.email = new SimpleStringProperty(email);
-    }
-
-    // Constructor para creación (sin ID)
-    public Veterinario(String nombre, String especialidad, String telefono, String email) {
-        this.id = new SimpleIntegerProperty(0); // ID inicial como 0 hasta que se asigne en la base de datos
-        this.nombre = new SimpleStringProperty(nombre);
-        this.especialidad = new SimpleStringProperty(especialidad);
-        this.telefono = new SimpleStringProperty(telefono);
-        this.email = new SimpleStringProperty(email);
+        this.id = id;
+        this.nombre = nombre;
+        this.especialidad = especialidad;
+        this.telefono = telefono;
+        this.email = email;
     }
 
     // Getters y Setters
-    public int getId() {
-        return id.get();
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id.set(id);
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public SimpleIntegerProperty idProperty() {
-        return id;
-    }
+    public String getEspecialidad() { return especialidad; }
+    public void setEspecialidad(String especialidad) { this.especialidad = especialidad; }
 
-    public String getNombre() {
-        return nombre.get();
-    }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 
-    public void setNombre(String nombre) {
-        this.nombre.set(nombre);
-    }
-
-    public SimpleStringProperty nombreProperty() {
-        return nombre;
-    }
-
-    public String getEspecialidad() {
-        return especialidad.get();
-    }
-
-    public void setEspecialidad(String especialidad) {
-        this.especialidad.set(especialidad);
-    }
-
-    public SimpleStringProperty especialidadProperty() {
-        return especialidad;
-    }
-
-    public String getTelefono() {
-        return telefono.get();
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono.set(telefono);
-    }
-
-    public SimpleStringProperty telefonoProperty() {
-        return telefono;
-    }
-
-    public String getEmail() {
-        return email.get();
-    }
-
-    public void setEmail(String email) {
-        this.email.set(email);
-    }
-
-    public SimpleStringProperty emailProperty() {
-        return email;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 }
-
-
-

@@ -2,31 +2,35 @@ package Controlador;
 
 import Modelo.Veterinario;
 import dao.VeterinarioDAO;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public class VeterinarioController {
+
     private final VeterinarioDAO veterinarioDAO;
 
     public VeterinarioController() {
         this.veterinarioDAO = new VeterinarioDAO();
     }
 
-    public void agregarVeterinario(Veterinario veterinario) throws SQLException {
-        veterinarioDAO.createVeterinario(veterinario);
+    public boolean insertarVeterinario(Veterinario veterinario) {
+        return veterinarioDAO.insertar(veterinario);
     }
 
-    public List<Veterinario> obtenerVeterinarios() throws SQLException {
-        return veterinarioDAO.getAllVeterinarios();
+    public List<Veterinario> obtenerTodosLosVeterinarios() {
+        return veterinarioDAO.obtenerTodos();
     }
 
-    public void actualizarVeterinario(Veterinario veterinario) throws SQLException {
-        veterinarioDAO.updateVeterinario(veterinario);
+    public Veterinario obtenerVeterinarioPorId(int id) {
+        return veterinarioDAO.obtenerPorId(id);
     }
 
-    public void eliminarVeterinario(int id) throws SQLException {
-        veterinarioDAO.deleteVeterinario(id);
+    public boolean actualizarVeterinario(Veterinario veterinario) {
+        return veterinarioDAO.actualizar(veterinario);
+    }
+
+    public boolean eliminarVeterinario(int id) {
+        return veterinarioDAO.eliminar(id);
     }
 }
+
 

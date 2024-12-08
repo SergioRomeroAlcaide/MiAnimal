@@ -2,30 +2,34 @@ package Controlador;
 
 import Modelo.Mascota;
 import dao.MascotaDAO;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public class MascotaController {
+
     private final MascotaDAO mascotaDAO;
 
     public MascotaController() {
         this.mascotaDAO = new MascotaDAO();
     }
 
-    public void agregarMascota(Mascota mascota) throws SQLException {
-        mascotaDAO.createMascota(mascota);
+    public boolean insertarMascota(Mascota mascota) {
+        return mascotaDAO.insertar(mascota);
     }
 
-    public List<Mascota> obtenerMascotas() throws SQLException {
-        return mascotaDAO.getAllMascotas();
+    public List<Mascota> obtenerTodasLasMascotas() {
+        return mascotaDAO.obtenerTodas();
     }
 
-    public void actualizarMascota(Mascota mascota) throws SQLException {
-        mascotaDAO.updateMascota(mascota);
+    public Mascota obtenerMascotaPorId(int id) {
+        return mascotaDAO.obtenerPorId(id);
     }
 
-    public void eliminarMascota(int id) throws SQLException {
-        mascotaDAO.deleteMascota(id);
+    public boolean actualizarMascota(Mascota mascota) {
+        return mascotaDAO.actualizar(mascota);
+    }
+
+    public boolean eliminarMascota(int id) {
+        return mascotaDAO.eliminar(id);
     }
 }
+
