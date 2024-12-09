@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+            prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="vistaControlador.loginFXMLController">
+   <children>
+      <VBox prefHeight="500.0" prefWidth="800.0" spacing="20.0" alignment="CENTER">
+         <children>
+            <!-- Título -->
+            <Label text="Inicio de Sesión - MiAnimal" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+            <!-- Campo Usuario -->
+            <HBox spacing="20.0" alignment="CENTER">
+               <children>
+                  <Label text="Usuario:" />
+                  <TextField fx:id="campoUsuario" promptText="Ingrese su usuario" />
+               </children>
+            </HBox>
+
+            <!-- Campo Contraseña -->
+            <HBox spacing="20.0" alignment="CENTER">
+               <children>
+                  <Label text="Contraseña:" />
+                  <PasswordField fx:id="campoContrasena" promptText="Ingrese su contraseña" />
+               </children>
+            </HBox>
+
+            <!-- Botón de Iniciar Sesión -->
+            <Button text="Iniciar Sesión" fx:id="btnIngresar" onAction="#iniciarSesion" />
+
+            <!-- Hipervínculo -->
+            <Hyperlink text="¿Olvidaste la contraseña?" style="-fx-font-size: 12px;" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

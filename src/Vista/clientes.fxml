@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="vistacontrolador.clientesFXMLController">
+    <!-- Encabezado -->
+    <top>
+        <Label text="Gestión de Clientes" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    </top>
+
+    <!-- Cuerpo principal -->
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+            <!-- Tabla de Clientes -->
+            <TableView fx:id="tablaClientes" prefHeight="300">
+                <columns>
+                    <TableColumn fx:id="columnaId" text="ID" prefWidth="50" />
+                    <TableColumn fx:id="columnaNombre" text="Nombre" prefWidth="150" />
+                    <TableColumn fx:id="columnaTelefono" text="Teléfono" prefWidth="100" />
+                    <TableColumn fx:id="columnaDireccion" text="Dirección" prefWidth="200" />
+                    <TableColumn fx:id="columnaEmail" text="Email" prefWidth="150" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <!-- Panel de Formularios y Botones -->
+    <bottom>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+            <!-- Formulario -->
+            <HBox spacing="10">
+                <VBox spacing="5">
+                    <Label text="Nombre" />
+                    <TextField fx:id="campoNombre" promptText="Ingrese el nombre" />
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Teléfono" />
+                    <TextField fx:id="campoTelefono" promptText="Ingrese el teléfono" />
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Dirección" />
+                    <TextField fx:id="campoDireccion" promptText="Ingrese la dirección" />
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Email" />
+                    <TextField fx:id="campoEmail" promptText="Ingrese el email" />
+                </VBox>
+            </HBox>
+
+            <!-- Botones de Acción -->
+            <HBox spacing="10" alignment="center">
+                <Button fx:id="btnAgregar" text="Agregar" />
+                <Button fx:id="btnActualizar" text="Actualizar" />
+                <Button fx:id="btnEliminar" text="Eliminar" />
+                <Button fx:id="btnLimpiar" text="Limpiar" />
+                <Button fx:id="btnVolver" text="Volver al Menú" onAction="#volverMenuPrincipal" />
+            </HBox>
+        </VBox>
+    </bottom>
+</BorderPane>
+
+
+
