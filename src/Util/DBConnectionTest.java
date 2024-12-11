@@ -1,11 +1,22 @@
 package Util;
-
+import Modelo.Cliente;
+import dao.ClienteDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 public class DBConnectionTest {
 
     public static void main(String[] args) {
+        
+        ClienteDAO clienteDAO = new ClienteDAO();
+        
+        // 🔥 Llamar al método obtenerTodos() y mostrar la lista
+        List<Cliente> clientes = clienteDAO.obtenerTodos();
+        
+        System.out.println("📋 Lista de clientes obtenidos:");
+        for (Cliente cliente : clientes) {
+            System.out.println(cliente);
         try (Connection connection = DBConnection.getConnection()) {
             if (connection != null && !connection.isClosed()) {
                 System.out.println("✅ Conexión establecida exitosamente.");
@@ -23,5 +34,5 @@ public class DBConnectionTest {
             e.printStackTrace();
         }
     }
-}
+}}
 

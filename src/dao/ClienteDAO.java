@@ -37,25 +37,27 @@ public class ClienteDAO {
      * @return Lista de clientes.
      */
     public List<Cliente> obtenerTodos() {
-        List<Cliente> clientes = new ArrayList<>();
-        String sql = "SELECT * FROM cliente";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                clientes.add(new Cliente(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("telefono"),
-                        rs.getString("direccion"),
-                        rs.getString("email")
-                ));
-            }
-        } catch (SQLException e) {
-            System.err.println("❌ Error al obtener los clientes: " + e.getMessage());
+    List<Cliente> clientes = new ArrayList<>();
+    String sql = "SELECT id, nombre, telefono, direccion, email FROM cliente";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+            clientes.add(new Cliente(
+                rs.getInt("id"),
+                rs.getString("nombre"),
+                rs.getString("telefono"),
+                rs.getString("direccion"),
+                rs.getString("email")
+            ));
         }
-        return clientes;
+    } catch (SQLException e) {
+        System.err.println("❌ Error al obtener los clientes: " + e.getMessage());
+        e.printStackTrace();
     }
+    return clientes;
+}
+
 
     /**
      * Obtiene un cliente por su ID.

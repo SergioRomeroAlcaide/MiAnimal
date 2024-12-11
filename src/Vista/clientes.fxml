@@ -18,15 +18,21 @@
                BorderPane.alignment="CENTER" />
     </top>
 
+    <!-- Sección central con el campo de búsqueda y la tabla de clientes -->
     <center>
         <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+
             <!-- Campo de búsqueda -->
             <HBox spacing="10">
                 <TextField fx:id="txtBuscar" promptText="Buscar por nombre o teléfono" />
-                <!-- 🔥 Botón de buscar -->
+                <!-- Botón de buscar -->
                 <Button fx:id="btnBuscar" text="Buscar" onAction="#buscarClientes" />
             </HBox>
 
+            <!-- Tabla de Clientes -->
             <TableView fx:id="tablaClientes" prefHeight="300">
                 <columns>
                     <TableColumn fx:id="colId" text="ID" prefWidth="50" />
@@ -39,13 +45,44 @@
         </VBox>
     </center>
 
+    <!-- Formulario de entrada de datos -->
     <bottom>
-        <HBox spacing="10">
-            <Button fx:id="btnAgregar" text="Agregar" onAction="#insertar" />
-            <Button fx:id="btnActualizar" text="Actualizar" onAction="#actualizar" />
-            <Button fx:id="btnEliminar" text="Eliminar" onAction="#eliminar" />
-            <Button fx:id="btnLimpiar" text="Limpiar" onAction="#limpiarCampos" />
-            <Button fx:id="btnVolver" text="Volver al Menú" onAction="#volverMenuPrincipal" />
-        </HBox>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+
+            <!-- Formulario de entrada de datos -->
+            <HBox spacing="10">
+                <VBox spacing="5">
+                    <Label text="Nombre" />
+                    <TextField fx:id="txtNombre" promptText="Ingrese el nombre del cliente" />
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Teléfono" />
+                    <TextField fx:id="txtTelefono" promptText="Ingrese el teléfono" />
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Dirección" />
+                    <TextField fx:id="txtDireccion" promptText="Ingrese la dirección" />
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Email" />
+                    <TextField fx:id="txtEmail" promptText="Ingrese el email" />
+                </VBox>
+            </HBox>
+
+            <!-- Botones de acción -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnAgregar" text="Agregar" onAction="#insertar" />
+                <Button fx:id="btnActualizar" text="Actualizar" onAction="#actualizar" />
+                <Button fx:id="btnEliminar" text="Eliminar" onAction="#eliminar" />
+                <Button fx:id="btnLimpiar" text="Limpiar" onAction="#limpiarCampos" />
+                <Button fx:id="btnVolver" text="Volver al Menú" onAction="#volverMenuPrincipal" />
+            </HBox>
+        </VBox>
     </bottom>
 </BorderPane>
