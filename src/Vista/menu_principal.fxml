@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="vistaControlador.menuPrincipalFXMLController">
+    <!-- Encabezado -->
+    <top>
+        <Label text="Menú Principal" style="-fx-font-size: 24px; -fx-font-weight: bold;" BorderPane.alignment="CENTER" />
+    </top>
+
+    <!-- Cuerpo principal con botones -->
+    <center>
+        <VBox spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20" />
+            </padding>
+
+            <Button text="Clientes" onAction="#abrirClientes" prefWidth="200" prefHeight="50" />
+            <Button text="Mascotas" onAction="#abrirMascotas" prefWidth="200" prefHeight="50" />
+            <Button text="Citas" onAction="#abrirCitas" prefWidth="200" prefHeight="50" />
+            <Button text="Veterinarios" onAction="#abrirVeterinarios" prefWidth="200" prefHeight="50" />
+            
+        </VBox>
+    </center>
+
+    <!-- Pie de página -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+            <Button text="Cerrar Sesión" onAction="#cerrarSesion" />
+            <Button text="Salir" onAction="#salirAplicacion" />
+        </HBox>
+    </bottom>
+</BorderPane>
+
