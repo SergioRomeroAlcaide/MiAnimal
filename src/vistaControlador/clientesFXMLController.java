@@ -13,6 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.event.ActionEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class clientesFXMLController {
 
@@ -55,7 +56,12 @@ public class clientesFXMLController {
         btnActualizar.setDisable(true);
         btnEliminar.setDisable(true);
         btnBuscar.setDisable(true);
-
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+        colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        
         // Llenar la tabla con los clientes de la base de datos
         llenarTablaClientes();
 

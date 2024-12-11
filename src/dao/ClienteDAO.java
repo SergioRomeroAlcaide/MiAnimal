@@ -38,7 +38,7 @@ public class ClienteDAO {
      */
     public List<Cliente> obtenerTodos() {
     List<Cliente> clientes = new ArrayList<>();
-    String sql = "SELECT id, nombre, telefono, direccion, email FROM cliente";
+    String sql = "SELECT * FROM cliente";
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql);
          ResultSet rs = stmt.executeQuery()) {
@@ -51,6 +51,7 @@ public class ClienteDAO {
                 rs.getString("email")
             ));
         }
+        System.out.println("📋 Clientes obtenidos: " + clientes); // Verifica la lista
     } catch (SQLException e) {
         System.err.println("❌ Error al obtener los clientes: " + e.getMessage());
         e.printStackTrace();

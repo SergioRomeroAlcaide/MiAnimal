@@ -16,7 +16,7 @@ public class MiAnimal extends Application {
             primaryStage = stage;
             cambiarVista("/Vista/login.fxml", "MiAnimal - Inicio de Sesión");
         } catch (Exception e) {
-            System.err.println("❌ Error general al iniciar la aplicación: " + e.getMessage());
+            System.err.println(" Error general al iniciar la aplicación: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -25,7 +25,7 @@ public class MiAnimal extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(MiAnimal.class.getResource(fxmlPath));
             if (loader == null) {
-                throw new RuntimeException("❌ No se encontró el archivo FXML en la ruta: " + fxmlPath);
+                throw new RuntimeException(" No se encontró el archivo FXML en la ruta: " + fxmlPath);
             }
 
             Parent root = loader.load();
@@ -34,15 +34,15 @@ public class MiAnimal extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
 
-            System.out.println("✅ Vista cargada correctamente: " + fxmlPath);
+            System.out.println(" Vista cargada correctamente: " + fxmlPath);
         } catch (Exception e) {
-            System.err.println("❌ Error al cargar la vista: " + fxmlPath);
+            System.err.println(" Error al cargar la vista: " + fxmlPath);
             e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
-        System.out.println("🚀 Iniciando MiAnimal...");
+        System.out.println(" Iniciando MiAnimal...");
         launch(args);
     }
 }
