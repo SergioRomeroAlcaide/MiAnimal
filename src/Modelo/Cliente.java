@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
- */
 package Modelo;
 
 public class Cliente {
@@ -35,6 +31,12 @@ public class Cliente {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+    
+    @Override
+    public String toString() {
+    return String.format("Cliente{id=%d, nombre='%s', telefono='%s', direccion='%s', email='%s'}", 
+                          id, nombre, telefono, direccion, email);
+}
 }
 
 

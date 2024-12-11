@@ -1,4 +1,3 @@
-
 package vistaControlador;
 
 import App.MiAnimal;
@@ -13,7 +12,7 @@ public class menuPrincipalFXMLController {
      */
     @FXML
     private void abrirClientes(ActionEvent event) {
-        cargarVista("/Vista/clientes.fxml", "Clientes");
+        MiAnimal.cambiarVista("/Vista/clientes.fxml", "Clientes");
     }
 
     /**
@@ -22,7 +21,7 @@ public class menuPrincipalFXMLController {
      */
     @FXML
     private void abrirMascotas(ActionEvent event) {
-        cargarVista("/Vista/mascotas.fxml", "Mascotas");
+        MiAnimal.cambiarVista("/Vista/mascotas.fxml", "Mascotas");
     }
 
     /**
@@ -31,7 +30,7 @@ public class menuPrincipalFXMLController {
      */
     @FXML
     private void abrirCitas(ActionEvent event) {
-        cargarVista("/Vista/citas.fxml", "Citas");
+        MiAnimal.cambiarVista("/Vista/citas.fxml", "Citas");
     }
 
     /**
@@ -40,7 +39,7 @@ public class menuPrincipalFXMLController {
      */
     @FXML
     private void abrirVeterinarios(ActionEvent event) {
-        cargarVista("/Vista/veterinarios.fxml", "Veterinarios");
+        MiAnimal.cambiarVista("/Vista/veterinarios.fxml", "Veterinarios");
     }
 
     /**
@@ -49,7 +48,8 @@ public class menuPrincipalFXMLController {
      */
     @FXML
     private void cerrarSesion(ActionEvent event) {
-        cargarVista("/Vista/login.fxml", "Iniciar sesión");
+        System.out.println("🔹 Cerrando sesión y volviendo a la pantalla de inicio de sesión.");
+        MiAnimal.cambiarVista("/Vista/login.fxml", "Iniciar sesión");
     }
 
     /**
@@ -58,20 +58,7 @@ public class menuPrincipalFXMLController {
      */
     @FXML
     private void salirAplicacion(ActionEvent event) {
+        System.out.println("🔹 Cerrando la aplicación.");
         System.exit(0);
-    }
-
-    /**
-     * Método para cargar una nueva vista en la ventana principal
-     * @param rutaFXML Ruta de la vista FXML
-     * @param titulo Título de la ventana
-     */
-    private void cargarVista(String rutaFXML, String titulo) {
-        try {
-            MiAnimal.cambiarVista(rutaFXML, titulo);
-        } catch (Exception e) {
-            System.err.println("❌ Error al cargar la vista: " + rutaFXML);
-            e.printStackTrace();
-        }
     }
 }

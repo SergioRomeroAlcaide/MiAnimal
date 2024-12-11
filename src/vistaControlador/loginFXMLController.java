@@ -50,8 +50,8 @@ public class loginFXMLController {
             if (loginController.validarUsuario(usuario, contrasena)) {
                 System.out.println("✅ Credenciales correctas. Cargando la vista de menú principal...");
                 
-                // 🔥 Cambio de vista (asegúrate de que la ruta sea correcta)
-                MiAnimal.cambiarVista("/Vista/menu_principal.fxml", "Menú Principal");
+                // 🔥 Cambio de vista 
+                MiAnimal.cambiarVista("/Vista/menuPrincipal.fxml", "Menú Principal");
 
             } else {
                 mostrarMensaje("Error", "Credenciales incorrectas.", AlertType.ERROR);
