@@ -13,68 +13,82 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="vistaControlador.mascotasFXMLController">
     <!-- Encabezado -->
     <top>
-        <Label text="Gestión de Mascotas" style="-fx-font-size: 18px; -fx-font-weight: bold;" BorderPane.alignment="CENTER" />
+        <Label text="Gestión de Mascotas" 
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-color: #4CAF50; -fx-text-fill: white;" 
+               BorderPane.alignment="CENTER" />
     </top>
 
-    <!-- Cuerpo principal -->
+    <!-- Sección central con el campo de búsqueda y la tabla de mascotas -->
     <center>
         <VBox spacing="10">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10" />
             </padding>
+
+            <!-- Campo de búsqueda -->
+            <HBox spacing="10">
+                <TextField fx:id="txtBuscar" promptText="Buscar por nombre o especie" />
+                <!-- Botón de buscar -->
+                <Button fx:id="btnBuscar" text="Buscar" onAction="#buscarMascotas" />
+            </HBox>
+
             <!-- Tabla de Mascotas -->
             <TableView fx:id="tablaMascotas" prefHeight="300">
                 <columns>
-                    <TableColumn fx:id="columnaId" text="ID" prefWidth="50" />
-                    <TableColumn fx:id="columnaNombre" text="Nombre" prefWidth="150" />
-                    <TableColumn fx:id="columnaEspecie" text="Especie" prefWidth="100" />
-                    <TableColumn fx:id="columnaRaza" text="Raza" prefWidth="100" />
-                    <TableColumn fx:id="columnaEdad" text="Edad" prefWidth="50" />
-                    <TableColumn fx:id="columnaClienteId" text="ID Cliente" prefWidth="100" />
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                    <TableColumn fx:id="colNombre" text="Nombre" prefWidth="150" />
+                    <TableColumn fx:id="colEspecie" text="Especie" prefWidth="100" />
+                    <TableColumn fx:id="colRaza" text="Raza" prefWidth="150" />
+                    <TableColumn fx:id="colEdad" text="Edad" prefWidth="50" />
+                    <TableColumn fx:id="colClienteId" text="ID Cliente" prefWidth="100" />
                 </columns>
             </TableView>
         </VBox>
     </center>
 
-    <!-- Panel de Formularios y Botones -->
+    <!-- Formulario de entrada de datos -->
     <bottom>
         <VBox spacing="10">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10" />
             </padding>
-            <!-- Formulario -->
+
+            <!-- Formulario de entrada de datos -->
             <HBox spacing="10">
                 <VBox spacing="5">
                     <Label text="Nombre" />
-                    <TextField fx:id="campoNombre" promptText="Ingrese el nombre de la mascota" />
+                    <TextField fx:id="txtNombre" promptText="Ingrese el nombre de la mascota" />
                 </VBox>
+
                 <VBox spacing="5">
                     <Label text="Especie" />
-                    <TextField fx:id="campoEspecie" promptText="Ingrese la especie" />
+                    <TextField fx:id="txtEspecie" promptText="Ingrese la especie" />
                 </VBox>
+
                 <VBox spacing="5">
                     <Label text="Raza" />
-                    <TextField fx:id="campoRaza" promptText="Ingrese la raza" />
+                    <TextField fx:id="txtRaza" promptText="Ingrese la raza" />
                 </VBox>
+
                 <VBox spacing="5">
                     <Label text="Edad" />
-                    <TextField fx:id="campoEdad" promptText="Ingrese la edad" />
+                    <TextField fx:id="txtEdad" promptText="Ingrese la edad" />
                 </VBox>
+
                 <VBox spacing="5">
                     <Label text="ID Cliente" />
-                    <TextField fx:id="campoClienteId" promptText="Ingrese el ID del cliente" />
+                    <TextField fx:id="txtClienteId" promptText="Ingrese el ID del cliente" />
                 </VBox>
             </HBox>
 
-            <!-- Botones de Acción -->
-            <HBox spacing="10" alignment="center">
-                <Button fx:id="btnAgregar" text="Agregar" onAction="#agregarMascota" />
-                <Button fx:id="btnActualizar" text="Actualizar" onAction="#actualizarMascota" />
-                <Button fx:id="btnEliminar" text="Eliminar" onAction="#eliminarMascota" />
-                <Button fx:id="btnLimpiar" text="Limpiar" onAction="#limpiarFormulario" />
-                <Button fx:id="btnVolver" text="Volver al Menú" onAction="#volverAlMenuPrincipal" />
+            <!-- Botones de acción -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnAgregar" text="Agregar" onAction="#insertar" />
+                <Button fx:id="btnActualizar" text="Actualizar" onAction="#actualizar" />
+                <Button fx:id="btnEliminar" text="Eliminar" onAction="#eliminar" />
+                <Button fx:id="btnLimpiar" text="Limpiar" onAction="#limpiarCampos" />
+                <Button fx:id="btnVolver" text="Volver al Menú" onAction="#volverMenuPrincipal" />
             </HBox>
         </VBox>
     </bottom>
 </BorderPane>
-

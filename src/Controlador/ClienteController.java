@@ -25,7 +25,7 @@ public class ClienteController {
         if (validarDatosCliente(cliente)) {
             return clienteDAO.insertar(cliente);
         } else {
-            System.err.println("❌ Los datos del cliente no son válidos.");
+            System.err.println(" Los datos del cliente no son válidos.");
             return false;
         }
     }
@@ -56,7 +56,7 @@ public class ClienteController {
         if (validarDatosCliente(cliente)) {
             return clienteDAO.actualizar(cliente);
         } else {
-            System.err.println("❌ Los datos del cliente no son válidos.");
+            System.err.println(" Los datos del cliente no son válidos.");
             return false;
         }
     }
@@ -79,7 +79,7 @@ public class ClienteController {
         if (criterio != null && !criterio.trim().isEmpty()) {
             return clienteDAO.buscarClientes(criterio);
         } else {
-            System.err.println("❌ El criterio de búsqueda está vacío.");
+            System.err.println(" El criterio de búsqueda está vacío.");
             return List.of();
         }
     }
