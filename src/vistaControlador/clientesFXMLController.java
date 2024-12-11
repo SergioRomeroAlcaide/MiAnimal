@@ -29,7 +29,7 @@ public class clientesFXMLController {
     private TextField txtNombre, txtTelefono, txtDireccion, txtEmail, txtBuscar;
 
     @FXML
-    private Button btnAgregar, btnActualizar, btnEliminar, btnLimpiar, btnVolver, btnBuscar;
+    private Button btnAgregar, btnActualizar, btnEliminar, btnLimpiar, btnVolver, btnBuscar; 
 
     private final ClienteController clienteController;
 
@@ -39,14 +39,10 @@ public class clientesFXMLController {
 
     @FXML
     public void initialize() {
-        // Deshabilitar los botones de Actualizar y Eliminar inicialmente
         btnActualizar.setDisable(true);
         btnEliminar.setDisable(true);
-
-        // Deshabilitar el botón de buscar inicialmente
         btnBuscar.setDisable(true);
 
-        // Llenar la tabla con todos los clientes al cargar la vista
         llenarTablaClientes();
 
         // Detectar la selección de filas en la tabla
@@ -94,6 +90,22 @@ public class clientesFXMLController {
     }
 
     @FXML
+    private void limpiarCampos() {
+        txtNombre.clear();
+        txtTelefono.clear();
+        txtDireccion.clear();
+        txtEmail.clear();
+        txtBuscar.clear();
+    }
+
+    private void mostrarMensaje(String titulo, String mensaje, AlertType tipoAlerta) {
+        Alert alerta = new Alert(tipoAlerta);
+        alerta.setTitle(titulo);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
+    }
+
+    @FXML
     private void actualizar(ActionEvent event) {
         Cliente clienteSeleccionado = tablaClientes.getSelectionModel().getSelectedItem();
         clienteSeleccionado.setNombre(txtNombre.getText());
@@ -121,15 +133,6 @@ public class clientesFXMLController {
     }
 
     @FXML
-    private void limpiarCampos() {
-        txtNombre.clear();
-        txtTelefono.clear();
-        txtDireccion.clear();
-        txtEmail.clear();
-        txtBuscar.clear();
-    }
-
-    @FXML
     private void volverMenuPrincipal(ActionEvent event) {
         try {
             MiAnimal.cambiarVista("/Vista/menuPrincipal.fxml", "Menú Principal");
@@ -137,12 +140,5 @@ public class clientesFXMLController {
             mostrarMensaje("Error", "No se pudo volver al menú principal.", AlertType.ERROR);
             e.printStackTrace();
         }
-    }
-
-    private void mostrarMensaje(String titulo, String mensaje, AlertType tipoAlerta) {
-        Alert alerta = new Alert(tipoAlerta);
-        alerta.setTitle(titulo);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
     }
 }

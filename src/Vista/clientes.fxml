@@ -18,17 +18,16 @@
                BorderPane.alignment="CENTER" />
     </top>
 
-    <!-- Cuerpo principal -->
     <center>
         <VBox spacing="10">
             <!-- Campo de búsqueda -->
             <HBox spacing="10">
                 <TextField fx:id="txtBuscar" promptText="Buscar por nombre o teléfono" />
-                <Button text="Buscar" onAction="#buscarClientes" />
+                <!-- 🔥 Botón de buscar -->
+                <Button fx:id="btnBuscar" text="Buscar" onAction="#buscarClientes" />
             </HBox>
 
-            <!-- Tabla de Clientes -->
-            <TableView fx:id="tablaClientes" prefHeight="300" columnResizePolicy="CONSTRAINED_RESIZE_POLICY">
+            <TableView fx:id="tablaClientes" prefHeight="300">
                 <columns>
                     <TableColumn fx:id="colId" text="ID" prefWidth="50" />
                     <TableColumn fx:id="colNombre" text="Nombre" prefWidth="150" />
@@ -40,12 +39,8 @@
         </VBox>
     </center>
 
-    <!-- Panel de botones de acción -->
     <bottom>
         <HBox spacing="10">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10" />
-            </padding>
             <Button fx:id="btnAgregar" text="Agregar" onAction="#insertar" />
             <Button fx:id="btnActualizar" text="Actualizar" onAction="#actualizar" />
             <Button fx:id="btnEliminar" text="Eliminar" onAction="#eliminar" />
