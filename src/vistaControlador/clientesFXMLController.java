@@ -130,6 +130,9 @@ public class clientesFXMLController {
         txtDireccion.clear();
         txtEmail.clear();
         txtBuscar.clear();
+        
+        // Llenar la tabla con todos los registros de la base de datos
+        llenarTablaClientes();
     }
 
     /**

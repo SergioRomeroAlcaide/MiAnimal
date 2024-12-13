@@ -35,8 +35,8 @@
                     <TableColumn fx:id="colFechaHora" text="Fecha y Hora" prefWidth="150" />
                     <TableColumn fx:id="colMotivo" text="Motivo" prefWidth="150" />
                     <TableColumn fx:id="colMascotaId" text="ID Mascota" prefWidth="100" />
-                    <TableColumn fx:id="colVeterinarioId" text="ID Veterinario" prefWidth="100" />
-                    <TableColumn fx:id="colRecordatorioEnviado" text="Recordatorio Enviado" prefWidth="100" />
+                    <TableColumn fx:id="colVeterinarioId" text="ID Veterinario" prefWidth="150" />
+                    <TableColumn fx:id="colRecordatorioEnviado" text="Recordatorio Enviado" prefWidth="150" />
                 </columns>
             </TableView>
         </VBox>

@@ -30,6 +30,10 @@ public class MiAnimal extends Application {
 
             Parent root = loader.load();
             Scene scene = new Scene(root);
+            
+            // Aplicar el archivo CSS a la escena
+            scene.getStylesheets().add(MiAnimal.class.getResource("/Util/estilos_Mianimal.css").toExternalForm());
+            
             primaryStage.setTitle(titulo);
             primaryStage.setScene(scene);
             primaryStage.show();

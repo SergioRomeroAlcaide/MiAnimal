@@ -165,6 +165,9 @@ public class citasFXMLController {
         txtMascotaId.clear();
         txtVeterinarioId.clear();
         txtBuscar.clear();
+        
+        // Llenar la tabla con todos los registros de la base de datos
+        llenarTablaCitas();
     }
 
     /**

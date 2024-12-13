@@ -1,0 +1,147 @@
+/* Archivo CSS para las vistas de la aplicación MiAnimal */
+
+/* Estilo general para todas las vistas */
+* {
+    -fx-font-family: 'Arial';
+    -fx-font-size: 14px;
+}
+
+/* Estilo del contenedor principal */
+.root {
+    -fx-background-color: #F5F5F5;
+}
+
+/* Estilo del título principal en la parte superior */
+.label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 4, 0.0, 0, 2);
+}
+
+/* Estilo para todos los botones */
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 4, 0.0, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: #45a049;
+}
+
+.button:disabled {
+    -fx-background-color: #9E9E9E;
+    -fx-text-fill: #BDBDBD;
+}
+
+/* Estilo para las cajas de texto (TextField) */
+.text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #BDBDBD;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px;
+}
+
+.text-field:focused {
+    -fx-border-color: #4CAF50;
+}
+
+/* Estilo para los contenedores VBox y HBox */
+.vbox, .hbox {
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+}
+
+/* Estilo para las tablas (TableView) */
+.table-view {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #BDBDBD;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+.table-column-header {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.table-cell {
+    -fx-padding: 8px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #F5F5F5;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #FFFFFF;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #A5D6A7 !important;
+}
+
+/* Estilo para los DatePicker */
+.date-picker {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #BDBDBD;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px;
+}
+
+.date-picker:focused {
+    -fx-border-color: #4CAF50;
+}
+
+/* Estilo para los ComboBox */
+.combo-box {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #BDBDBD;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px;
+}
+
+.combo-box:focused {
+    -fx-border-color: #4CAF50;
+}
+
+/* Estilo para los CheckBox */
+.check-box {
+    -fx-text-fill: #4CAF50;
+    -fx-font-weight: bold;
+}
+
+/* Estilo para los mensajes de alerta (Alert) */
+.dialog-pane {
+    -fx-background-color: #FFFFFF;
+}
+
+.dialog-pane .content {
+    -fx-padding: 20px;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+.dialog-pane .button-bar .button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+.dialog-pane .button-bar .button:hover {
+    -fx-background-color: #45a049;
+}

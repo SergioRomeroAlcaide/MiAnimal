@@ -140,6 +140,9 @@ public class mascotasFXMLController {
         txtEdad.clear();
         txtClienteId.clear();
         txtBuscar.clear();
+        
+        // Llenar la tabla con todos los registros de la base de datos
+        llenarTablaMascotas();
     }
 
     /**

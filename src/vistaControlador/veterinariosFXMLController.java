@@ -130,6 +130,9 @@ public class veterinariosFXMLController {
         txtTelefono.clear();
         txtEmail.clear();
         txtBuscar.clear();
+        
+        // Llenar la tabla con todos los registros de la base de datos
+        llenarTablaVeterinarios();
     }
 
     /**
