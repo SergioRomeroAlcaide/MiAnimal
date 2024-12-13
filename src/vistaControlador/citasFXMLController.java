@@ -10,39 +10,59 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import javafx.scene.control.CheckBox;
+
 public class citasFXMLController {
 
-    // Tabla para mostrar la lista de citas
+    // Elementos de la tabla
     @FXML
     private TableView<Cita> tablaCitas;
 
-    // Columnas de la tabla para mostrar los datos de cada cita
     @FXML
     private TableColumn<Cita, Integer> colId;
 
     @FXML
-    private TableColumn<Cita, String> colFechaHora, colMotivo;
+    private TableColumn<Cita, LocalDateTime> colFechaHora;
 
     @FXML
-    private TableColumn<Cita, Integer> colMascotaId, colVeterinarioId;
+    private TableColumn<Cita, String> colMotivo;
+
+    @FXML
+    private TableColumn<Cita, Integer> colMascotaId;
+
+    @FXML
+    private TableColumn<Cita, Integer> colVeterinarioId;
 
     @FXML
     private TableColumn<Cita, Boolean> colRecordatorioEnviado;
 
-    // Campos de texto para ingresar los datos de una cita
+    // Campos de entrada
     @FXML
-    private TextField txtFechaHora, txtMotivo, txtMascotaId, txtVeterinarioId, txtBuscar;
+    private DatePicker datePickerFecha;
 
-    // Botones para realizar las distintas acciones
     @FXML
-    private Button btnAgregar, btnActualizar, btnEliminar, btnLimpiar, btnVolver, btnBuscar; 
+    private ComboBox<String> comboHora;
 
-    // Controlador para manejar la lógica de negocio de las citas
+    @FXML
+    private TextField txtMotivo, txtMascotaId, txtVeterinarioId, txtBuscar;
+    
+    @FXML 
+    private CheckBox checkRecordatorioEnviado;
+
+    // Botones de acción
+    @FXML
+    private Button btnAgregar, btnActualizar, btnEliminar, btnLimpiar, btnVolver, btnBuscar;
+
     private final CitaController citaController;
 
     /**
@@ -54,34 +74,31 @@ public class citasFXMLController {
 
     /**
      * Método que se ejecuta al cargar la vista.
-     * Se inicializan los botones y se llena la tabla con las citas.
+     * Se inicializan los botones, el ComboBox de horas y se llena la tabla con las citas.
      */
     @FXML
     public void initialize() {
-        // Deshabilitar los botones de Actualizar, Eliminar y Buscar inicialmente
         btnActualizar.setDisable(true);
         btnEliminar.setDisable(true);
         btnBuscar.setDisable(true);
-
-        // Configurar las columnas de la tabla
+        
+        comboHora.getItems().addAll("08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00");
+        
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colFechaHora.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
         colMotivo.setCellValueFactory(new PropertyValueFactory<>("motivo"));
-        colMascotaId.setCellValueFactory(new PropertyValueFactory<>("mascota_id"));
-        colVeterinarioId.setCellValueFactory(new PropertyValueFactory<>("veterinario_id"));
+        colMascotaId.setCellValueFactory(new PropertyValueFactory<>("mascotaId"));
+        colVeterinarioId.setCellValueFactory(new PropertyValueFactory<>("veterinarioId"));
         colRecordatorioEnviado.setCellValueFactory(new PropertyValueFactory<>("recordatorioEnviado"));
 
-        // Llenar la tabla con las citas de la base de datos
         llenarTablaCitas();
 
-        // Detectar la selección de filas en la tabla para habilitar los botones de Actualizar y Eliminar
         tablaCitas.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             boolean seleccion = newSelection != null;
             btnActualizar.setDisable(!seleccion);
             btnEliminar.setDisable(!seleccion);
         });
 
-        // Detectar si hay texto en el campo de búsqueda para habilitar el botón de Buscar
         txtBuscar.textProperty().addListener((observable, oldValue, newValue) -> {
             btnBuscar.setDisable(newValue.trim().isEmpty());
         });
@@ -97,6 +114,7 @@ public class citasFXMLController {
 
     /**
      * Realiza la búsqueda de citas con base en el criterio ingresado.
+     * 
      * @param event Evento de la acción.
      */
     @FXML
@@ -108,30 +126,31 @@ public class citasFXMLController {
                 mostrarMensaje("Sin resultados", "No se encontraron citas con ese criterio.", AlertType.INFORMATION);
             }
             tablaCitas.setItems(citas);
-        } else {
-            mostrarMensaje("Advertencia", "Ingrese un criterio de búsqueda.", AlertType.WARNING);
         }
     }
 
     /**
      * Inserta una nueva cita con los datos ingresados en los campos de texto.
+     * 
      * @param event Evento de la acción.
      */
     @FXML
     private void insertar(ActionEvent event) {
         try {
-            int mascotaId = Integer.parseInt(txtMascotaId.getText());
-            int veterinarioId = Integer.parseInt(txtVeterinarioId.getText());
-            Cita cita = new Cita(0, txtFechaHora.getText(), txtMotivo.getText(), mascotaId, veterinarioId, false);
+            LocalDate fecha = datePickerFecha.getValue();
+            LocalTime hora = LocalTime.parse(comboHora.getValue());
+            LocalDateTime fechaHora = LocalDateTime.of(fecha, hora);
+            Cita cita = new Cita(0, fechaHora, txtMotivo.getText(), 
+                                Integer.parseInt(txtMascotaId.getText()), 
+                                Integer.parseInt(txtVeterinarioId.getText()), 
+                                checkRecordatorioEnviado.isSelected());
             if (citaController.insertarCita(cita)) {
                 mostrarMensaje("Éxito", "Cita agregada con éxito.", AlertType.INFORMATION);
                 llenarTablaCitas();
                 limpiarCampos();
-            } else {
-                mostrarMensaje("Error", "No se pudo agregar la cita.", AlertType.ERROR);
             }
         } catch (NumberFormatException e) {
-            mostrarMensaje("Error", "Los campos de Mascota ID y Veterinario ID deben ser numéricos.", AlertType.ERROR);
+            mostrarMensaje("Error", "Los campos de ID de mascota y veterinario deben ser números.", AlertType.ERROR);
         }
     }
 
@@ -140,7 +159,8 @@ public class citasFXMLController {
      */
     @FXML
     private void limpiarCampos() {
-        txtFechaHora.clear();
+        datePickerFecha.setValue(null);
+        comboHora.setValue(null);
         txtMotivo.clear();
         txtMascotaId.clear();
         txtVeterinarioId.clear();
@@ -148,7 +168,63 @@ public class citasFXMLController {
     }
 
     /**
+     * Actualiza los datos de una cita seleccionada en la tabla.
+     * 
+     * @param event Evento de la acción.
+     */
+    @FXML
+    private void actualizar(ActionEvent event) {
+        try {
+            Cita citaSeleccionada = tablaCitas.getSelectionModel().getSelectedItem();
+            LocalDate fecha = datePickerFecha.getValue();
+            LocalTime hora = LocalTime.parse(comboHora.getValue());
+            LocalDateTime fechaHora = LocalDateTime.of(fecha, hora);
+
+            citaSeleccionada.setFechaHora(fechaHora);
+            citaSeleccionada.setMotivo(txtMotivo.getText());
+            citaSeleccionada.setMascotaId(Integer.parseInt(txtMascotaId.getText()));
+            citaSeleccionada.setVeterinarioId(Integer.parseInt(txtVeterinarioId.getText()));
+
+            if (citaController.actualizarCita(citaSeleccionada)) {
+                mostrarMensaje("Éxito", "Cita actualizada con éxito.", AlertType.INFORMATION);
+                llenarTablaCitas();
+            }
+        } catch (NumberFormatException e) {
+            mostrarMensaje("Error", "Los campos de ID de mascota y veterinario deben ser números.", AlertType.ERROR);
+        }
+    }
+
+    /**
+     * Elimina la cita seleccionada en la tabla.
+     * 
+     * @param event Evento de la acción.
+     */
+    @FXML
+    private void eliminar(ActionEvent event) {
+        Cita citaSeleccionada = tablaCitas.getSelectionModel().getSelectedItem();
+        if (citaSeleccionada != null && citaController.eliminarCita(citaSeleccionada.getId())) {
+            mostrarMensaje("Éxito", "Cita eliminada con éxito.", AlertType.INFORMATION);
+            llenarTablaCitas();
+        }
+    }
+
+    /**
+     * Vuelve a la vista principal del menú.
+     * 
+     * @param event Evento de la acción.
+     */
+    @FXML
+    private void volverMenuPrincipal(ActionEvent event) {
+        try {
+            MiAnimal.cambiarVista("/Vista/menuPrincipal.fxml", "Menú Principal");
+        } catch (Exception e) {
+            mostrarMensaje("Error", "No se pudo volver al menú principal.", AlertType.ERROR);
+        }
+    }
+
+    /**
      * Muestra un mensaje de alerta en la pantalla.
+     * 
      * @param titulo El título de la ventana de la alerta.
      * @param mensaje El mensaje a mostrar.
      * @param tipoAlerta El tipo de alerta (ERROR, INFORMATION, WARNING, etc.).
@@ -158,61 +234,5 @@ public class citasFXMLController {
         alerta.setTitle(titulo);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
-    }
-
-    /**
-     * Actualiza los datos de una cita seleccionada en la tabla.
-     * @param event Evento de la acción.
-     */
-    @FXML
-    private void actualizar(ActionEvent event) {
-        try {
-            Cita citaSeleccionada = tablaCitas.getSelectionModel().getSelectedItem();
-            int mascotaId = Integer.parseInt(txtMascotaId.getText());
-            int veterinarioId = Integer.parseInt(txtVeterinarioId.getText());
-
-            citaSeleccionada.setFechaHora(txtFechaHora.getText());
-            citaSeleccionada.setMotivo(txtMotivo.getText());
-            citaSeleccionada.setMascota_id(mascotaId);
-            citaSeleccionada.setVeterinario_id(veterinarioId);
-
-            if (citaController.actualizarCita(citaSeleccionada)) {
-                mostrarMensaje("Éxito", "Cita actualizada con éxito.", AlertType.INFORMATION);
-                llenarTablaCitas();
-            } else {
-                mostrarMensaje("Error", "No se pudo actualizar la cita.", AlertType.ERROR);
-            }
-        } catch (NumberFormatException e) {
-            mostrarMensaje("Error", "Los campos de Mascota ID y Veterinario ID deben ser numéricos.", AlertType.ERROR);
-        }
-    }
-
-    /**
-     * Elimina la cita seleccionada en la tabla.
-     * @param event Evento de la acción.
-     */
-    @FXML
-    private void eliminar(ActionEvent event) {
-        Cita citaSeleccionada = tablaCitas.getSelectionModel().getSelectedItem();
-        if (citaController.eliminarCita(citaSeleccionada.getId())) {
-            mostrarMensaje("Éxito", "Cita eliminada con éxito.", AlertType.INFORMATION);
-            llenarTablaCitas();
-        } else {
-            mostrarMensaje("Error", "No se pudo eliminar la cita.", AlertType.ERROR);
-        }
-    }
-
-    /**
-     * Vuelve a la vista principal del menú.
-     * @param event Evento de la acción.
-     */
-    @FXML
-    private void volverMenuPrincipal(ActionEvent event) {
-        try {
-            MiAnimal.cambiarVista("/Vista/menuPrincipal.fxml", "Menú Principal");
-        } catch (Exception e) {
-            mostrarMensaje("Error", "No se pudo volver al menú principal.", AlertType.ERROR);
-            e.printStackTrace();
-        }
     }
 }

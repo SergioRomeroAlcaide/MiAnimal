@@ -1,15 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import Modelo.Cita;
 import Util.DBConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,15 +22,16 @@ public class CitaDAO {
         String sql = "INSERT INTO cita (fechaHora, motivo, mascota_id, veterinario_id, recordatorioEnviado) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, cita.getFechaHora());
+            stmt.setObject(1, cita.getFechaHora()); // Usando setObject para LocalDateTime
             stmt.setString(2, cita.getMotivo());
-            stmt.setInt(3, cita.getMascota_id());
-            stmt.setInt(4, cita.getVeterinario_id());
+            stmt.setInt(3, cita.getMascotaId());
+            stmt.setInt(4, cita.getVeterinarioId());
             stmt.setBoolean(5, cita.isRecordatorioEnviado());
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.err.println("❌ Error al insertar la cita: " + e.getMessage());
+            System.err.println("❌ Error al insertar cita: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -49,17 +48,16 @@ public class CitaDAO {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 citas.add(new Cita(
-                        rs.getInt("id"),
-                        rs.getString("fechaHora"),
-                        rs.getString("motivo"),
-                        rs.getInt("mascota_id"),
-                        rs.getInt("veterinario_id"),
-                        rs.getBoolean("recordatorioEnviado")
+                    rs.getInt("id"),
+                    rs.getObject("fechaHora", LocalDateTime.class), // Usando getObject para LocalDateTime
+                    rs.getString("motivo"),
+                    rs.getInt("mascota_id"),
+                    rs.getInt("veterinario_id"),
+                    rs.getBoolean("recordatorioEnviado")
                 ));
             }
-            System.out.println("📋 Citas obtenidas: " + citas);
         } catch (SQLException e) {
-            System.err.println("❌ Error al obtener las citas: " + e.getMessage());
+            System.err.println("❌ Error al obtener todas las citas: " + e.getMessage());
             e.printStackTrace();
         }
         return citas;
@@ -78,12 +76,12 @@ public class CitaDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Cita(
-                            rs.getInt("id"),
-                            rs.getString("fechaHora"),
-                            rs.getString("motivo"),
-                            rs.getInt("mascota_id"),
-                            rs.getInt("veterinario_id"),
-                            rs.getBoolean("recordatorioEnviado")
+                        rs.getInt("id"),
+                        rs.getObject("fechaHora", LocalDateTime.class), // Usando getObject para LocalDateTime
+                        rs.getString("motivo"),
+                        rs.getInt("mascota_id"),
+                        rs.getInt("veterinario_id"),
+                        rs.getBoolean("recordatorioEnviado")
                     );
                 }
             }
@@ -103,10 +101,10 @@ public class CitaDAO {
         String sql = "UPDATE cita SET fechaHora = ?, motivo = ?, mascota_id = ?, veterinario_id = ?, recordatorioEnviado = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, cita.getFechaHora());
+            stmt.setObject(1, cita.getFechaHora()); // Usando setObject para LocalDateTime
             stmt.setString(2, cita.getMotivo());
-            stmt.setInt(3, cita.getMascota_id());
-            stmt.setInt(4, cita.getVeterinario_id());
+            stmt.setInt(3, cita.getMascotaId());
+            stmt.setInt(4, cita.getVeterinarioId());
             stmt.setBoolean(5, cita.isRecordatorioEnviado());
             stmt.setInt(6, cita.getId());
             stmt.executeUpdate();
@@ -138,80 +136,30 @@ public class CitaDAO {
     }
 
     /**
-     * Busca citas por fecha, motivo o veterinario.
-     * @param criterio Texto a buscar (puede ser en fecha, motivo o veterinario).
+     * Busca citas por motivo.
+     * @param criterio Texto a buscar (puede ser parte del motivo).
      * @return Lista de citas que coincidan con el criterio.
      */
     public List<Cita> buscarCitas(String criterio) {
         List<Cita> citas = new ArrayList<>();
-        String sql = "SELECT * FROM cita WHERE fechaHora LIKE ? OR motivo LIKE ?";
+        String sql = "SELECT * FROM cita WHERE motivo LIKE ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, "%" + criterio + "%");
-            stmt.setString(2, "%" + criterio + "%");
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     citas.add(new Cita(
-                            rs.getInt("id"),
-                            rs.getString("fechaHora"),
-                            rs.getString("motivo"),
-                            rs.getInt("mascota_id"),
-                            rs.getInt("veterinario_id"),
-                            rs.getBoolean("recordatorioEnviado")
+                        rs.getInt("id"),
+                        rs.getObject("fechaHora", LocalDateTime.class), // Usando getObject para LocalDateTime
+                        rs.getString("motivo"),
+                        rs.getInt("mascota_id"),
+                        rs.getInt("veterinario_id"),
+                        rs.getBoolean("recordatorioEnviado")
                     ));
                 }
             }
         } catch (SQLException e) {
             System.err.println("❌ Error al buscar citas: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return citas;
-    }
-
-    /**
-     * Marca una cita como "Recordatorio Enviado" en la base de datos.
-     * @param id ID de la cita a marcar.
-     * @return true si se marcó correctamente, false de lo contrario.
-     */
-    public boolean marcarRecordatorioEnviado(int id) {
-        String sql = "UPDATE cita SET recordatorioEnviado = 1 WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("❌ Error al marcar el recordatorio de la cita como enviado: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * Obtiene las citas próximas en los próximos días.
-     * @param dias Número de días para buscar las próximas citas.
-     * @return Lista de citas próximas.
-     */
-    public List<Cita> obtenerCitasProximas(int dias) {
-        List<Cita> citas = new ArrayList<>();
-        String sql = "SELECT * FROM cita WHERE fechaHora >= NOW() AND fechaHora <= DATE_ADD(NOW(), INTERVAL ? DAY)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, dias);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    citas.add(new Cita(
-                            rs.getInt("id"),
-                            rs.getString("fechaHora"),
-                            rs.getString("motivo"),
-                            rs.getInt("mascota_id"),
-                            rs.getInt("veterinario_id"),
-                            rs.getBoolean("recordatorioEnviado")
-                    ));
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("❌ Error al obtener las citas próximas: " + e.getMessage());
             e.printStackTrace();
         }
         return citas;
