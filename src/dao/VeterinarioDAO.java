@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import Modelo.Veterinario;
 import Util.DBConnection;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,127 +13,145 @@ public class VeterinarioDAO {
 
     /**
      * Inserta un nuevo veterinario en la base de datos.
-     * 
-     * @param veterinario El veterinario que se desea insertar.
-     * @return true si la operación se realiza con éxito, false en caso contrario.
+     * @param veterinario Veterinario con los datos a insertar.
+     * @return true si se insertó correctamente, false de lo contrario.
      */
     public boolean insertar(Veterinario veterinario) {
-        String query = "INSERT INTO Veterinario (nombre, especialidad, telefono, email) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO veterinario (nombre, especialidad, telefono, email) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, veterinario.getNombre());
             stmt.setString(2, veterinario.getEspecialidad());
             stmt.setString(3, veterinario.getTelefono());
             stmt.setString(4, veterinario.getEmail());
-
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.err.println("Error al insertar el veterinario: " + e.getMessage());
+            System.err.println("❌ Error al insertar veterinario: " + e.getMessage());
             return false;
         }
     }
 
     /**
-     * Obtiene todos los veterinarios almacenados en la base de datos.
-     * 
-     * @return Lista de objetos Veterinario.
+     * Obtiene todos los veterinarios de la base de datos.
+     * @return Lista de veterinarios.
      */
     public List<Veterinario> obtenerTodos() {
         List<Veterinario> veterinarios = new ArrayList<>();
-        String query = "SELECT * FROM Veterinario";
+        String sql = "SELECT * FROM veterinario";
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                Veterinario veterinario = new Veterinario(
+                veterinarios.add(new Veterinario(
                     rs.getInt("id"),
                     rs.getString("nombre"),
                     rs.getString("especialidad"),
                     rs.getString("telefono"),
                     rs.getString("email")
-                );
-                veterinarios.add(veterinario);
+                ));
             }
+            System.out.println("📋 Veterinarios obtenidos: " + veterinarios);
         } catch (SQLException e) {
-            System.err.println("Error al obtener todos los veterinarios: " + e.getMessage());
+            System.err.println("❌ Error al obtener los veterinarios: " + e.getMessage());
+            e.printStackTrace();
         }
         return veterinarios;
     }
 
     /**
      * Obtiene un veterinario por su ID.
-     * 
-     * @param id El ID del veterinario que se desea obtener.
-     * @return El objeto Veterinario correspondiente o null si no se encuentra.
+     * @param id ID del veterinario.
+     * @return Veterinario con el ID especificado o null si no se encuentra.
      */
     public Veterinario obtenerPorId(int id) {
-        String query = "SELECT * FROM Veterinario WHERE id = ?";
+        String sql = "SELECT * FROM veterinario WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Veterinario(
-                    rs.getInt("id"),
-                    rs.getString("nombre"),
-                    rs.getString("especialidad"),
-                    rs.getString("telefono"),
-                    rs.getString("email")
-                );
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Veterinario(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("especialidad"),
+                        rs.getString("telefono"),
+                        rs.getString("email")
+                    );
+                }
             }
         } catch (SQLException e) {
-            System.err.println("Error al obtener el veterinario con ID " + id + ": " + e.getMessage());
+            System.err.println("❌ Error al obtener el veterinario por ID: " + e.getMessage());
         }
         return null;
     }
 
     /**
-     * Actualiza la información de un veterinario en la base de datos.
-     * 
-     * @param veterinario El veterinario con la información actualizada.
-     * @return true si la operación se realiza con éxito, false en caso contrario.
+     * Actualiza los datos de un veterinario en la base de datos.
+     * @param veterinario Veterinario con los nuevos datos a actualizar.
+     * @return true si se actualizó correctamente, false de lo contrario.
      */
     public boolean actualizar(Veterinario veterinario) {
-        String query = "UPDATE Veterinario SET nombre = ?, especialidad = ?, telefono = ?, email = ? WHERE id = ?";
+        String sql = "UPDATE veterinario SET nombre = ?, especialidad = ?, telefono = ?, email = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, veterinario.getNombre());
             stmt.setString(2, veterinario.getEspecialidad());
             stmt.setString(3, veterinario.getTelefono());
             stmt.setString(4, veterinario.getEmail());
             stmt.setInt(5, veterinario.getId());
-
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.err.println("Error al actualizar el veterinario con ID " + veterinario.getId() + ": " + e.getMessage());
+            System.err.println("❌ Error al actualizar veterinario: " + e.getMessage());
             return false;
         }
     }
 
     /**
      * Elimina un veterinario de la base de datos.
-     * 
-     * @param id El ID del veterinario que se desea eliminar.
-     * @return true si la operación se realiza con éxito, false en caso contrario.
+     * @param id ID del veterinario a eliminar.
+     * @return true si se eliminó correctamente, false de lo contrario.
      */
     public boolean eliminar(int id) {
-        String query = "DELETE FROM Veterinario WHERE id = ?";
+        String sql = "DELETE FROM veterinario WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.err.println("Error al eliminar el veterinario con ID " + id + ": " + e.getMessage());
+            System.err.println("❌ Error al eliminar veterinario: " + e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Busca veterinarios por nombre o especialidad.
+     * @param criterio Texto a buscar (puede ser nombre o especialidad).
+     * @return Lista de veterinarios que coincidan con el criterio.
+     */
+    public List<Veterinario> buscarVeterinarios(String criterio) {
+        List<Veterinario> veterinarios = new ArrayList<>();
+        String sql = "SELECT * FROM veterinario WHERE nombre LIKE ? OR especialidad LIKE ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + criterio + "%");
+            stmt.setString(2, "%" + criterio + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    veterinarios.add(new Veterinario(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("especialidad"),
+                        rs.getString("telefono"),
+                        rs.getString("email")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Error al buscar veterinarios: " + e.getMessage());
+        }
+        return veterinarios;
     }
 }

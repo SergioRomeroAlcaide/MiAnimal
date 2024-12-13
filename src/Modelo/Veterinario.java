@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
- */
 package Modelo;
 
 public class Veterinario {
@@ -35,4 +31,10 @@ public class Veterinario {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+    
+    @Override
+    public String toString() {
+        return String.format("Veterinario{id=%d, nombre='%s', especialidad='%s', telefono='%s', email='%s'}", 
+                              id, nombre, especialidad, telefono, email);
+    }
 }

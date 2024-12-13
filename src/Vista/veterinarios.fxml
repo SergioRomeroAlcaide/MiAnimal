@@ -1,60 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="vistaControlador.veterinariosFXMLController">
+    <!-- Encabezado -->
     <top>
-        <Label text="Gestión de Veterinarios" style="-fx-font-size: 18px; -fx-font-weight: bold;" BorderPane.alignment="CENTER" />
+        <Label text="Gestión de Veterinarios" 
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-color: #4CAF50; -fx-text-fill: white;" 
+               BorderPane.alignment="CENTER" />
     </top>
 
+    <!-- Sección central con el campo de búsqueda y la tabla de veterinarios -->
     <center>
         <VBox spacing="10">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10" />
             </padding>
+
+            <!-- Campo de búsqueda -->
+            <HBox spacing="10">
+                <TextField fx:id="txtBuscar" promptText="Buscar por nombre o especialidad" />
+                <!-- Botón de buscar -->
+                <Button fx:id="btnBuscar" text="Buscar" onAction="#buscarVeterinarios" />
+            </HBox>
+
+            <!-- Tabla de Veterinarios -->
             <TableView fx:id="tablaVeterinarios" prefHeight="300">
                 <columns>
-                    <TableColumn fx:id="columnaId" text="ID" prefWidth="50" />
-                    <TableColumn fx:id="columnaNombre" text="Nombre" prefWidth="150" />
-                    <TableColumn fx:id="columnaEspecialidad" text="Especialidad" prefWidth="100" />
-                    <TableColumn fx:id="columnaTelefono" text="Teléfono" prefWidth="100" />
-                    <TableColumn fx:id="columnaEmail" text="Email" prefWidth="200" />
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                    <TableColumn fx:id="colNombre" text="Nombre" prefWidth="150" />
+                    <TableColumn fx:id="colEspecialidad" text="Especialidad" prefWidth="150" />
+                    <TableColumn fx:id="colTelefono" text="Teléfono" prefWidth="100" />
+                    <TableColumn fx:id="colEmail" text="Email" prefWidth="150" />
                 </columns>
             </TableView>
         </VBox>
     </center>
 
+    <!-- Formulario de entrada de datos -->
     <bottom>
         <VBox spacing="10">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10" />
             </padding>
+
+            <!-- Formulario de entrada de datos -->
             <HBox spacing="10">
                 <VBox spacing="5">
                     <Label text="Nombre" />
-                    <TextField fx:id="campoNombre" promptText="Ingrese el nombre" />
+                    <TextField fx:id="txtNombre" promptText="Ingrese el nombre del veterinario" />
                 </VBox>
+
                 <VBox spacing="5">
                     <Label text="Especialidad" />
-                    <TextField fx:id="campoEspecialidad" promptText="Ingrese la especialidad" />
+                    <TextField fx:id="txtEspecialidad" promptText="Ingrese la especialidad" />
                 </VBox>
+
                 <VBox spacing="5">
                     <Label text="Teléfono" />
-                    <TextField fx:id="campoTelefono" promptText="Ingrese el teléfono" />
+                    <TextField fx:id="txtTelefono" promptText="Ingrese el teléfono" />
                 </VBox>
+
                 <VBox spacing="5">
                     <Label text="Email" />
-                    <TextField fx:id="campoEmail" promptText="Ingrese el email" />
+                    <TextField fx:id="txtEmail" promptText="Ingrese el email" />
                 </VBox>
             </HBox>
-            <HBox spacing="10" alignment="center">
-                <Button fx:id="btnAgregar" text="Agregar" onAction="#agregarVeterinario" />
-                <Button fx:id="btnActualizar" text="Actualizar" onAction="#actualizarVeterinario" />
-                <Button fx:id="btnEliminar" text="Eliminar" onAction="#eliminarVeterinario" />
-                <Button fx:id="btnLimpiar" text="Limpiar" onAction="#limpiarFormulario" />
-                <Button fx:id="btnVolver" text="Volver al Menú" onAction="#volverAlMenuPrincipal" />
+
+            <!-- Botones de acción -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnAgregar" text="Agregar" onAction="#insertar" />
+                <Button fx:id="btnActualizar" text="Actualizar" onAction="#actualizar" />
+                <Button fx:id="btnEliminar" text="Eliminar" onAction="#eliminar" />
+                <Button fx:id="btnLimpiar" text="Limpiar" onAction="#limpiarCampos" />
+                <Button fx:id="btnVolver" text="Volver al Menú" onAction="#volverMenuPrincipal" />
             </HBox>
         </VBox>
     </bottom>
