@@ -17,7 +17,7 @@ public class DBConnectionTest {
         System.out.println("📋 Lista de clientes obtenidos:");
         for (Cliente cliente : clientes) {
             System.out.println(cliente);
-        try (Connection connection = DBConnection.getConnection()) {
+        try (Connection connection = DBConnection2.getConnection()) {
             if (connection != null && !connection.isClosed()) {
                 System.out.println("✅ Conexión establecida exitosamente.");
                 System.out.println("🔍 Estado de la conexión: " + (connection.isClosed() ? "Cerrada" : "Abierta"));
