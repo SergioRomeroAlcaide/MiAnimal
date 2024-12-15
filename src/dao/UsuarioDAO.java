@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import Modelo.Usuario;
@@ -15,12 +11,9 @@ public class UsuarioDAO {
 
     /**
      * Inserta un nuevo usuario en la base de datos.
-     * 
-     * @param usuario El usuario que se desea insertar.
-     * @return true si la operación se realiza con éxito, false en caso contrario.
      */
     public boolean insertar(Usuario usuario) {
-        String query = "INSERT INTO Usuario (nombreUsuario, contraseña, rol) VALUES (?, ?, ?)";
+        String query = "INSERT INTO usuario (nombreUsuario, contraseña, rol) VALUES (?, SHA2(?, 256), ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -31,19 +24,18 @@ public class UsuarioDAO {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.err.println("Error al insertar el usuario: " + e.getMessage());
+            System.err.println("❌ Error al insertar el usuario: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
     /**
      * Obtiene todos los usuarios almacenados en la base de datos.
-     * 
-     * @return Lista de objetos Usuario.
      */
     public List<Usuario> obtenerTodos() {
         List<Usuario> usuarios = new ArrayList<>();
-        String query = "SELECT * FROM Usuario";
+        String query = "SELECT * FROM usuario";
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -58,19 +50,16 @@ public class UsuarioDAO {
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
-            System.err.println("Error al obtener todos los usuarios: " + e.getMessage());
+            System.err.println("❌ Error al obtener todos los usuarios: " + e.getMessage());
         }
         return usuarios;
     }
 
     /**
      * Obtiene un usuario por su ID.
-     * 
-     * @param id El ID del usuario que se desea obtener.
-     * @return El objeto Usuario correspondiente o null si no se encuentra.
      */
     public Usuario obtenerPorId(int id) {
-        String query = "SELECT * FROM Usuario WHERE id = ?";
+        String query = "SELECT * FROM usuario WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -86,19 +75,16 @@ public class UsuarioDAO {
                 );
             }
         } catch (SQLException e) {
-            System.err.println("Error al obtener el usuario con ID " + id + ": " + e.getMessage());
+            System.err.println("❌ Error al obtener el usuario con ID " + id + ": " + e.getMessage());
         }
         return null;
     }
 
     /**
      * Actualiza la información de un usuario en la base de datos.
-     * 
-     * @param usuario El usuario con la información actualizada.
-     * @return true si la operación se realiza con éxito, false en caso contrario.
      */
     public boolean actualizar(Usuario usuario) {
-        String query = "UPDATE Usuario SET nombreUsuario = ?, contraseña = ?, rol = ? WHERE id = ?";
+        String query = "UPDATE usuario SET nombreUsuario = ?, contraseña = SHA2(?, 256), rol = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -110,19 +96,17 @@ public class UsuarioDAO {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.err.println("Error al actualizar el usuario con ID " + usuario.getId() + ": " + e.getMessage());
+            System.err.println("❌ Error al actualizar el usuario con ID " + usuario.getId() + ": " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
     /**
      * Elimina un usuario de la base de datos.
-     * 
-     * @param id El ID del usuario que se desea eliminar.
-     * @return true si la operación se realiza con éxito, false en caso contrario.
      */
     public boolean eliminar(int id) {
-        String query = "DELETE FROM Usuario WHERE id = ?";
+        String query = "DELETE FROM usuario WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -130,20 +114,17 @@ public class UsuarioDAO {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.err.println("Error al eliminar el usuario con ID " + id + ": " + e.getMessage());
+            System.err.println("❌ Error al eliminar el usuario con ID " + id + ": " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
     /**
      * Valida si el usuario y la contraseña son correctos.
-     * 
-     * @param nombreUsuario El nombre de usuario.
-     * @param contraseña La contraseña del usuario.
-     * @return true si el usuario y la contraseña coinciden, false en caso contrario.
      */
     public boolean validarUsuario(String nombreUsuario, String contraseña) {
-        String query = "SELECT * FROM Usuario WHERE nombreUsuario = ? AND contraseña = ?";
+        String query = "SELECT * FROM usuario WHERE nombreUsuario = ? AND contraseña = SHA2(?, 256)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -152,7 +133,8 @@ public class UsuarioDAO {
             ResultSet rs = stmt.executeQuery();
             return rs.next();
         } catch (SQLException e) {
-            System.err.println("Error al validar el usuario: " + e.getMessage());
+            System.err.println("❌ Error al validar el usuario: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }

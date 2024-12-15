@@ -32,7 +32,7 @@ public class loginFXMLController {
      */
     @FXML
     private void iniciarSesion(ActionEvent event) {
-        // 🚀 Imprimir para verificar que la acción se está ejecutando
+        //  Imprimir para verificar que la acción se está ejecutando
         System.out.println("🔹 Método iniciarSesion ejecutado");
 
         // Obtener los datos de usuario y contraseña
@@ -50,7 +50,7 @@ public class loginFXMLController {
             if (loginController.validarUsuario(usuario, contrasena)) {
                 System.out.println("✅ Credenciales correctas. Cargando la vista de menú principal...");
                 
-                // 🔥 Cambio de vista 
+                //  Cambio de vista 
                 MiAnimal.cambiarVista("/Vista/menuPrincipal.fxml", "Menú Principal");
 
             } else {
