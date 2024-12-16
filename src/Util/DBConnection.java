@@ -8,8 +8,8 @@ public class DBConnection {
 
     // Parámetros de conexión
     private static final String URL = "jdbc:mariadb://localhost:3306/mianimal?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&useUnicode=true";
-    private static final String USER = "admin"; // Asegúrate de que el usuario sea correcto
-    private static final String PASSWORD = "admin"; // Reemplaza con tu contraseña real
+    private static final String USER = "admin"; 
+    private static final String PASSWORD = "admin"; 
 
     // Objeto de conexión
     private static Connection connection;

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +20,10 @@ public class CitaDAO {
      * @return true si se insertó correctamente, false de lo contrario.
      */
     public boolean insertar(Cita cita) {
-        String sql = "INSERT INTO cita (fechaHora, motivo, mascota_id, veterinario_id, recordatorioEnviado) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cita (fechaHora, motivo, mascotaId, veterinarioId, recordatorioEnviado) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setObject(1, cita.getFechaHora()); // Usando setObject para LocalDateTime
+            stmt.setTimestamp(1, Timestamp.valueOf(cita.getFechaHora())); // Conversion LocalDateTime a Timestamp
             stmt.setString(2, cita.getMotivo());
             stmt.setInt(3, cita.getMascotaId());
             stmt.setInt(4, cita.getVeterinarioId());
@@ -49,13 +50,14 @@ public class CitaDAO {
             while (rs.next()) {
                 citas.add(new Cita(
                     rs.getInt("id"),
-                    rs.getObject("fechaHora", LocalDateTime.class), // Usando getObject para LocalDateTime
+                    rs.getTimestamp("fechaHora").toLocalDateTime(), // Conversión de DATETIME a LocalDateTime
                     rs.getString("motivo"),
-                    rs.getInt("mascota_id"),
-                    rs.getInt("veterinario_id"),
+                    rs.getInt("mascotaId"), // Cambio correcto del nombre de la columna
+                    rs.getInt("veterinarioId"), // Cambio correcto del nombre de la columna
                     rs.getBoolean("recordatorioEnviado")
                 ));
             }
+            System.out.println("📋 Citas obtenidas: " + citas); // Imprimir la lista de citas para depuración
         } catch (SQLException e) {
             System.err.println("❌ Error al obtener todas las citas: " + e.getMessage());
             e.printStackTrace();
@@ -77,10 +79,10 @@ public class CitaDAO {
                 if (rs.next()) {
                     return new Cita(
                         rs.getInt("id"),
-                        rs.getObject("fechaHora", LocalDateTime.class), // Usando getObject para LocalDateTime
+                        rs.getTimestamp("fechaHora").toLocalDateTime(), 
                         rs.getString("motivo"),
-                        rs.getInt("mascota_id"),
-                        rs.getInt("veterinario_id"),
+                        rs.getInt("mascotaId"), 
+                        rs.getInt("veterinarioId"), 
                         rs.getBoolean("recordatorioEnviado")
                     );
                 }
@@ -98,10 +100,10 @@ public class CitaDAO {
      * @return true si se actualizó correctamente, false de lo contrario.
      */
     public boolean actualizar(Cita cita) {
-        String sql = "UPDATE cita SET fechaHora = ?, motivo = ?, mascota_id = ?, veterinario_id = ?, recordatorioEnviado = ? WHERE id = ?";
+        String sql = "UPDATE cita SET fechaHora = ?, motivo = ?, mascotaId = ?, veterinarioId = ?, recordatorioEnviado = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setObject(1, cita.getFechaHora()); // Usando setObject para LocalDateTime
+            stmt.setTimestamp(1, Timestamp.valueOf(cita.getFechaHora()));
             stmt.setString(2, cita.getMotivo());
             stmt.setInt(3, cita.getMascotaId());
             stmt.setInt(4, cita.getVeterinarioId());
@@ -150,14 +152,15 @@ public class CitaDAO {
                 while (rs.next()) {
                     citas.add(new Cita(
                         rs.getInt("id"),
-                        rs.getObject("fechaHora", LocalDateTime.class), // Usando getObject para LocalDateTime
+                        rs.getTimestamp("fechaHora").toLocalDateTime(), 
                         rs.getString("motivo"),
-                        rs.getInt("mascota_id"),
-                        rs.getInt("veterinario_id"),
+                        rs.getInt("mascotaId"), 
+                        rs.getInt("veterinarioId"), 
                         rs.getBoolean("recordatorioEnviado")
                     ));
                 }
             }
+            System.out.println("📋 Citas encontradas con criterio '" + criterio + "': " + citas);
         } catch (SQLException e) {
             System.err.println("❌ Error al buscar citas: " + e.getMessage());
             e.printStackTrace();
